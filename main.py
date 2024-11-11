@@ -38,7 +38,9 @@ if __name__ == '__main__':
 
     # Set biases and styles
     biases = [.75 for _ in wrapped_lines]
-    styles = [7 for _ in wrapped_lines]
+    styles = [4 for _ in wrapped_lines]
+    stroke_widths = [1 for _ in wrapped_lines]
+
 
     # Generate the handwriting SVG
     hand.write(
@@ -46,4 +48,5 @@ if __name__ == '__main__':
         lines=wrapped_lines,
         biases=biases,
         styles=styles,
+        stroke_widths=stroke_widths,
     )

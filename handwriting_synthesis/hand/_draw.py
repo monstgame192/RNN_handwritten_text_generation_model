@@ -8,7 +8,7 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     stroke_colors = stroke_colors or ['black'] * len(lines)
     stroke_widths = stroke_widths or [2] * len(lines)
 
-    line_height = 60
+    line_height = 40
     view_width = 1000
     view_height = line_height * (len(strokes) + 1)
 
