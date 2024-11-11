@@ -1,5 +1,6 @@
 import numpy as np
 import svgwrite
+import cairosvg
 
 from handwriting_synthesis import drawing
 
@@ -44,3 +45,5 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
         initial_coord[1] -= line_height
 
     dwg.save()
+
+    cairosvg.svg2png(url=filename, write_to=filename + '.png')
