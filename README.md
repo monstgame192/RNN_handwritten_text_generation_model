@@ -1,6 +1,6 @@
 ![](img/banner.svg)
 
-# Handwriting Synthesis (TFv2)
+# Handwriting Synthesis (TFv2) https://github.com/otuva/handwriting-synthesis
 
 Original repo migrated to tensorflow v2 with better structure
 
