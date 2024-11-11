@@ -7,24 +7,29 @@ from handwriting_synthesis import drawing
 def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     stroke_colors = stroke_colors or ['black'] * len(lines)
     stroke_widths = stroke_widths or [2] * len(lines)
-
+    
     line_height = 32
     view_width = 1000
-    view_height = line_height * (len(strokes) + 1)
+    total_lines_per_page = 28  # Fixed number of lines per page
+    view_height = line_height * total_lines_per_page
 
     # Initialize the SVG drawing
     dwg = svgwrite.Drawing(filename=filename)
     dwg.viewbox(width=view_width, height=view_height)
     dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill='white'))
 
-    # Draw ruled lines
-    for i in range(len(strokes) + 1):
-        y_position = line_height * (i + 1) - line_height / 2  # Adjust position to line up with text
+    # Draw fixed number of ruled lines
+    for i in range(total_lines_per_page):
+        y_position = line_height * (i + 1) - line_height / 2  # Adjust as needed to align with text
         dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke='lightgray', stroke_width=1))
 
     # Starting position for text
     initial_coord = np.array([0, -(3 * line_height / 4)])
-    for offsets, line, color, width in zip(strokes, lines, stroke_colors, stroke_widths):
+    for i, (offsets, line, color, width) in enumerate(zip(strokes, lines, stroke_colors, stroke_widths)):
+        # Stop drawing text if lines exceed the fixed page limit
+        if i >= total_lines_per_page:
+            break
+
         if not line:
             initial_coord[1] -= line_height
             continue
