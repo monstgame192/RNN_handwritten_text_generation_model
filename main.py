@@ -1,6 +1,6 @@
 from handwriting_synthesis import Hand
 
-def wrap_lines(lines, max_length=50):
+def wrap_lines(lines, max_length=60):
     wrapped_lines = []
     for line in lines:
         words = line.split()
@@ -47,8 +47,8 @@ lines = [
     "Art, music, and culture blossomed, providing a reflection of society's joys, sorrows, and aspirations, immortalized in creations that transcend time.",
 ]
 
-# Wrap lines to ensure no line exceeds 50 characters
-wrapped_lines = wrap_lines(lines, max_length=50)
+# Wrap lines to ensure no line exceeds 40 characters
+wrapped_lines = wrap_lines(lines, max_length=60)
 
 # Paginate wrapped lines into pages of 24 lines each
 lines_per_page = 24
