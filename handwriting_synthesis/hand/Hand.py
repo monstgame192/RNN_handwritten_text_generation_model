@@ -43,7 +43,7 @@ class Hand(object):
             if len(line) > 75:
                 raise ValueError(
                     (
-                        "Each line must be at most 75 characters. "
+                        "Each line must be at most 200 characters. "
                         "Line {} contains {}"
                     ).format(line_num, len(line))
                 )
