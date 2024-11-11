@@ -1,12 +1,4 @@
-import numpy as np
 from handwriting_synthesis import Hand
-
-give_up = """Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you"""
 
 lines = [
     "Rudraneel Dutta",
