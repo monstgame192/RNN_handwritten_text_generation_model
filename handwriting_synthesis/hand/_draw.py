@@ -9,9 +9,10 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     stroke_widths = stroke_widths or [2] * len(lines)
     
     line_height = 32
-    view_width = 1000
     total_lines_per_page = 28  # Fixed number of lines per page
     view_height = line_height * total_lines_per_page
+    view_width = view_height * 0.707
+
 
     # Initialize the SVG drawing
     dwg = svgwrite.Drawing(filename=filename)
