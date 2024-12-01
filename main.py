@@ -1,5 +1,25 @@
 from handwriting_synthesis import Hand
 
+def sanitize_input(text, allowed_chars):
+    """
+    Replace characters in the input text that are not in the allowed set with a space.
+    :param text: The input text as a string.
+    :param allowed_chars: The list of allowed characters.
+    :return: Sanitized text.
+    """
+    sanitized_text = ''.join(char if char in allowed_chars else ' ' for char in text)
+    return sanitized_text
+
+alphabet = [
+    '\x00', ' ', '!', '"', '#', "'", '(', ')', ',', '-', '.',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';',
+    '?', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+    'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'Y',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+    'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+    'y', 'z'
+]
+
 def wrap_lines(lines, max_length=60):
     wrapped_lines = []
     for line in lines:
@@ -41,8 +61,10 @@ lines = [
     "Art, music, and culture blossomed, providing a reflection of society's joys, sorrows, and aspirations, immortalized in creations that transcend time.",
 ]
 
-# Wrap lines to ensure no line exceeds 40 characters
-wrapped_lines = wrap_lines(lines, max_length=60)
+sanitized_lines = [sanitize_input(line, alphabet) for line in lines]
+
+# Wrap lines to ensure no line exceeds 60 characters
+wrapped_lines = wrap_lines(sanitized_lines, max_length=60)
 
 # Paginate wrapped lines into pages of 24 lines each
 lines_per_page = 24
@@ -53,8 +75,8 @@ if __name__ == '__main__':
 
     for page_num, page_lines in enumerate(pages):
         # Set biases and styles for the current page
-        biases = [0.75 for _ in page_lines]
-        styles = [4 for _ in page_lines]
+        biases = [0.95 for _ in page_lines]
+        styles = [1 for _ in page_lines]
         stroke_widths = [1 for _ in page_lines]
 
         # Generate the handwriting SVG for each page
