@@ -24,12 +24,6 @@ def paginate_lines(wrapped_lines, lines_per_page=24):
     # Split wrapped lines into pages with fixed lines per page
     return [wrapped_lines[i:i + lines_per_page] for i in range(0, len(wrapped_lines), lines_per_page)]
 
-# Original text lines
-'''lines = [
-    "This is the first paragraph, and it contains several long sentences, which should be split into multiple lines, because it exceeds fifty characters, and we want to see how the wrapping happens in practice.",
-    "The second paragraph is just as long, with a lot of words that go beyond the fifty character limit. Here we will check if the wrapping works correctly, making sure no line exceeds the specified maximum length.",
-    "Finally, this is the third paragraph. It has long text as well, and will be wrapped accordingly, so we can check if everything works as expected, wrapping lines at appropriate points, without cutting off any words in the middle."
-]'''
 
 lines = [
     "In the beginning, there was only a vast expanse of darkness, an endless void filled with possibilities yet untouched.",
