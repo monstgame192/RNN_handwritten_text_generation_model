@@ -11,7 +11,7 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     line_height = 32
     total_lines_per_page = 28  # Fixed number of lines per page
     view_height = line_height * total_lines_per_page
-    view_width = view_height * 0.707
+    view_width = view_height * 0.707 # ratio for a4 paper
 
 
     # Initialize the SVG drawing
