@@ -1,14 +1,14 @@
 from handwriting_synthesis import Hand
+import os
 
-def sanitize_input(text, allowed_chars):
-    """
-    Replace characters in the input text that are not in the allowed set with a space.
-    :param text: The input text as a string.
-    :param allowed_chars: The list of allowed characters.
-    :return: Sanitized text.
-    """
-    sanitized_text = ''.join(char if char in allowed_chars else ' ' for char in text)
-    return sanitized_text
+def read_lines_from_file(file_path):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"The file {file_path} does not exist.")
+    
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()
+    return [line.strip() for line in lines if line.strip()]
+
 
 alphabet = [
     '\x00', ' ', '!', '"', '#', "'", '(', ')', ',', '-', '.',
@@ -19,6 +19,14 @@ alphabet = [
     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
     'y', 'z'
 ]
+
+
+def sanitize_input(text, allowed_chars):
+    sanitized_text = ''.join(char if char in allowed_chars else ' ' for char in text)
+    return sanitized_text
+
+
+
 
 def wrap_lines(lines, max_length=60):
     wrapped_lines = []
@@ -44,33 +52,26 @@ def paginate_lines(wrapped_lines, lines_per_page=24):
     # Split wrapped lines into pages with fixed lines per page
     return [wrapped_lines[i:i + lines_per_page] for i in range(0, len(wrapped_lines), lines_per_page)]
 
-
-lines = [
-    "In the beginning, there was only a vast expanse of darkness, an endless void filled with possibilities yet untouched.",
-    "As eons passed, stars began to form, galaxies spun into existence, and the universe slowly took shape, full of wonder and mystery.",
-    "The Earth emerged as a small blue planet amidst the vastness of space, a cradle for life as we know it, and a home to countless creatures.",
-    "Mountains rose from the Earth's crust, rivers carved through landscapes, and the seas teamed with life, each playing a role in the delicate balance of nature.",
-    "Humanity appeared, bringing with it curiosity and intelligence, striving to understand its place among the stars and uncover the secrets of existence.",
-    "Civilizations flourished, built upon the wisdom of those who came before, with stories, art, and knowledge passed down through generations.",
-    "Technological advancements reshaped societies, connecting distant lands and bringing about rapid changes that transformed the human experience.",
-    "With each new discovery, humanity's understanding of the cosmos grew, from the motion of planets to the composition of distant stars.",
-    "The pursuit of science and exploration led to great achievements, from landing on the moon to exploring the depths of the ocean.",
-    "Throughout history, individuals have sought meaning and purpose, pondering the mysteries of life, death, and the universe itself.",
-    "Philosophers, poets, and thinkers left behind works that continue to inspire, questioning the nature of reality and the essence of the human soul.",
-    "In times of struggle, humanity showed resilience, finding strength in unity and hope, rising above challenges to build a better future.",
-    "Art, music, and culture blossomed, providing a reflection of society's joys, sorrows, and aspirations, immortalized in creations that transcend time.",
-]
-
-sanitized_lines = [sanitize_input(line, alphabet) for line in lines]
-
-# Wrap lines to ensure no line exceeds 60 characters
-wrapped_lines = wrap_lines(sanitized_lines, max_length=60)
-
-# Paginate wrapped lines into pages of 24 lines each
-lines_per_page = 24
-pages = paginate_lines(wrapped_lines, lines_per_page=lines_per_page)
-
 if __name__ == '__main__':
+    input_file = 'input.txt'  # Replace with your text file name
+
+    # Read lines from the text file
+    try:
+        lines = read_lines_from_file(input_file)
+    except FileNotFoundError as e:
+        print(e)
+        exit(1)
+
+    # Sanitize each line
+    sanitized_lines = [sanitize_input(line, alphabet) for line in lines]
+
+    # Wrap sanitized lines to ensure no line exceeds 40 characters
+    wrapped_lines = wrap_lines(sanitized_lines, max_length=60)
+
+    # Paginate wrapped lines into pages of 24 lines each
+    lines_per_page = 24
+    pages = paginate_lines(wrapped_lines, lines_per_page=lines_per_page)
+
     hand = Hand()
 
     for page_num, page_lines in enumerate(pages):
