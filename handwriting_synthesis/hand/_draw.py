@@ -19,13 +19,22 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     dwg.viewbox(width=view_width, height=view_height)
     dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill='white'))
 
+    margin_left = -2 * line_height
+    margin_top = -3 * line_height
+
     # Draw fixed number of ruled lines
     for i in range(total_lines_per_page):
-        y_position = line_height * (i + 1) - line_height / 2  # Adjust as needed to align with text
+        y_position = line_height * (i + 1) - line_height - margin_top # Adjust as needed to align with text
         dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke='lightgray', stroke_width=1))
 
     # Starting position for text
-    initial_coord = np.array([0, -(3 * line_height / 4)])
+    # initial_coord = np.array([0, -(3 * line_height / 4)])
+
+
+
+    initial_coord = np.array([margin_left, margin_top - line_height/2])
+
+
     for i, (offsets, line, color, width) in enumerate(zip(strokes, lines, stroke_colors, stroke_widths)):
         # Stop drawing text if lines exceed the fixed page limit
         if i >= total_lines_per_page:
