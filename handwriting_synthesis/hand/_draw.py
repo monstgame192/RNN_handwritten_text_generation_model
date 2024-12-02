@@ -34,11 +34,6 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
     dwg.add(dwg.line(start=(0, -margin_top - 5), end=(view_width, -margin_top - 5), stroke='red', stroke_width=1))
 
 
-    # Starting position for text
-    # initial_coord = np.array([0, -(3 * line_height / 4)])
-
-
-
     initial_coord = np.array([margin_left, margin_top - line_height/2])
 
 
