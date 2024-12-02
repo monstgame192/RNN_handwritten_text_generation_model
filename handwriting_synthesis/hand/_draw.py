@@ -27,6 +27,13 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
         y_position = line_height * (i + 1) - line_height - margin_top # Adjust as needed to align with text
         dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke='lightgray', stroke_width=1))
 
+    dwg.add(dwg.line(start=(-margin_left + line_height/2, 0), end=(-margin_left + line_height/2, view_height), stroke='red', stroke_width=1))
+    dwg.add(dwg.line(start=(-margin_left + line_height/2 - 5, 0), end=(-margin_left + line_height/2 - 5, view_height), stroke='red', stroke_width=1))
+
+    dwg.add(dwg.line(start=(0, -margin_top), end=(view_width, -margin_top), stroke='red', stroke_width=1))
+    dwg.add(dwg.line(start=(0, -margin_top - 5), end=(view_width, -margin_top - 5), stroke='red', stroke_width=1))
+
+
     # Starting position for text
     # initial_coord = np.array([0, -(3 * line_height / 4)])
 
