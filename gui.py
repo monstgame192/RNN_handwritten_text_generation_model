@@ -335,8 +335,26 @@ def reset_default():
     update_preview()
 
 # Update the style value label when the style selection changes
+
 def update_style_label(event=None):
-    style_value_label.config(text=styles_combobox.get())
+    # Get the selected style
+    selected_style = styles_combobox.get()
+    
+    # Construct the image file path based on the selected style
+    image_path = f"assets/font{selected_style}.png"
+    
+    try:
+        # Load the image
+        style_image = PhotoImage(file=image_path)
+        
+        # Update the image label
+        style_value_label.config(image=style_image)
+        style_value_label.image = style_image  # Keep a reference to the image to prevent garbage collection
+    
+    except Exception as e:
+        # If the image doesn't exist or there is an error, show a default message
+        style_value_label.config(text="Image not found")
+        print(f"Error loading image: {e}")
 
 # Create the main window
 root = tk.Tk()
@@ -442,14 +460,15 @@ reset_button.grid(row=0, column=2, padx=10)
 style_frame = tk.Frame(param_frame)
 style_frame.grid(row=len(fields) + 4, column=0, columnspan=2, pady=10)
 
-# Label to display the selected style
-style_label = tk.Label(style_frame, text="Selected Style: ")
-style_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
-
-# Label to show the selected style value
-style_value_label = tk.Label(style_frame, text=styles_combobox.get())
+# Label to show the selected style value (now will display an image)
+style_value_label = tk.Label(style_frame)
 style_value_label.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+
+# Bind the update_style_label function to the combobox event
 styles_combobox.bind("<<ComboboxSelected>>", update_style_label)
+
+# Initialize the style display with the default selected style (usually "1")
+root.after(100, update_style_label)
 
 
 root.after(100, update_preview)
