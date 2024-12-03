@@ -91,33 +91,12 @@ def update_preview():
         x_offset = (canvas.winfo_width() - rect_width) / 2
         y_offset = (canvas.winfo_height() - rect_height) / 2
 
-        # Draw the rectangle on the canvas
-        canvas.create_rectangle(
-            x_offset, y_offset, 
-            x_offset + rect_width, y_offset + rect_height,
-            outline="black", fill="white"
-        )
-
         margin_left_ratio = margin_left / view_width
         margin_top_ratio = margin_top / view_height
 
         # Calculate the actual pixel positions for the margins
         margin_left_x = x_offset + rect_width * margin_left_ratio  # Position of the left margin (vertical line)
         margin_top_y = y_offset + rect_height * margin_top_ratio  # Position of the top margin (horizontal line)
-
-        # Draw the red left margin vertical line
-        canvas.create_line(
-            margin_left_x, y_offset,  # Starting point of the vertical line (top of the rectangle)
-            margin_left_x, y_offset + rect_height,  # Ending point of the vertical line (bottom of the rectangle)
-            fill="red", width=2
-        )
-
-        # Draw the red top margin horizontal line
-        canvas.create_line(
-            x_offset, margin_top_y,  # Starting point of the horizontal line (left side of the rectangle)
-            x_offset + rect_width, margin_top_y,  # Ending point of the horizontal line (right side of the rectangle)
-            fill="red", width=2
-        )
 
         # Draw light gray horizontal lines starting from the top margin + line height
         line_height_ratio = line_height_input / view_height  # Line height as a ratio of the view height
@@ -134,6 +113,27 @@ def update_preview():
                 fill="lightgray", width=1
             )
             current_y += actual_line_height  # Move down for the next line
+
+        # Draw the red left margin vertical line
+        canvas.create_line(
+            margin_left_x, y_offset,  # Starting point of the vertical line (top of the rectangle)
+            margin_left_x, y_offset + rect_height,  # Ending point of the vertical line (bottom of the rectangle)
+            fill="red", width=2
+        )
+
+        # Draw the red top margin horizontal line
+        canvas.create_line(
+            x_offset, margin_top_y,  # Starting point of the horizontal line (left side of the rectangle)
+            x_offset + rect_width, margin_top_y,  # Ending point of the horizontal line (right side of the rectangle)
+            fill="red", width=2
+        )
+
+        # Draw the outer rectangle
+        canvas.create_rectangle(
+            x_offset, y_offset, 
+            x_offset + rect_width, y_offset + rect_height,
+            outline="black", fill=""
+        )
 
         # Display the value of view_width along the left margin of the rectangle
         canvas.create_text(
@@ -159,7 +159,6 @@ def update_preview():
             anchor="s",  # Anchor to the bottom
             font=("Arial", 10)
         )
-
 
     except Exception as e:
         messagebox.showerror("Error", str(e))
