@@ -76,96 +76,106 @@ def update_preview():
         total_lines = int(total_lines_entry.get())
         line_height_input = int(line_height_entry.get())  # Get the line height from user input
 
-        # Clear the canvas before drawing a new rectangle
+        # Clear the canvas before drawing
         canvas.delete("all")
 
-        # Calculate the rectangle size based on view_height and view_width
+        # Calculate the rectangle size
         if view_height > view_width:
-            rect_height = canvas.winfo_height() * 0.9  # 90% of the canvas height
-            rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
+            rect_height = canvas.winfo_height() * 0.9
+            rect_width = (view_width / view_height) * rect_height
         else:
-            rect_width = canvas.winfo_width() * 0.5  # 90% of the canvas width
-            rect_height = (view_height / view_width) * rect_width  # Proportional height based on the user's view values
+            rect_width = canvas.winfo_width() * 0.5
+            rect_height = (view_height / view_width) * rect_width
 
-        # Calculate the top-left corner to center the rectangle on the canvas
+        # Center the rectangle
         x_offset = (canvas.winfo_width() - rect_width) / 2
         y_offset = (canvas.winfo_height() - rect_height) / 2
 
         margin_left_ratio = margin_left / view_width
         margin_top_ratio = margin_top / view_height
+        margin_left_x = x_offset + rect_width * margin_left_ratio
+        margin_top_y = y_offset + rect_height * margin_top_ratio
 
-        # Calculate the actual pixel positions for the margins
-        margin_left_x = x_offset + rect_width * margin_left_ratio  # Position of the left margin (vertical line)
-        margin_top_y = y_offset + rect_height * margin_top_ratio  # Position of the top margin (horizontal line)
+        # Calculate the line height in pixels
+        line_height_ratio = line_height_input / view_height
+        actual_line_height = rect_height * line_height_ratio
 
-        # Draw light gray horizontal lines starting from the top margin + line height
-        line_height_ratio = line_height_input / view_height  # Line height as a ratio of the view height
-        actual_line_height = rect_height * line_height_ratio  # Convert to pixel value
-
-        # Calculate the starting position for the first horizontal line
-        current_y = margin_top_y + actual_line_height
-
-        # Draw the lines
-        for _ in range(total_lines):
-            canvas.create_line(
-                x_offset, current_y,
-                x_offset + rect_width, current_y,
-                fill="lightgray", width=1
-            )
-            current_y += actual_line_height  # Move down for the next line
-
-        # Draw the red left margin vertical line
-        canvas.create_line(
-            margin_left_x, y_offset,  # Starting point of the vertical line (top of the rectangle)
-            margin_left_x, y_offset + rect_height,  # Ending point of the vertical line (bottom of the rectangle)
-            fill="red", width=2
-        )
-
-        # Draw the red top margin horizontal line
-        canvas.create_line(
-            x_offset, margin_top_y,  # Starting point of the horizontal line (left side of the rectangle)
-            x_offset + rect_width, margin_top_y,  # Ending point of the horizontal line (right side of the rectangle)
-            fill="red", width=2
-        )
-
-        # Draw the outer rectangle
+        # Draw rectangle and margins
         canvas.create_rectangle(
             x_offset, y_offset, 
             x_offset + rect_width, y_offset + rect_height,
             outline="black", fill=""
         )
+        canvas.create_line(margin_left_x, y_offset, margin_left_x, y_offset + rect_height, fill="red", width=2)
+        canvas.create_line(x_offset, margin_top_y, x_offset + rect_width, margin_top_y, fill="red", width=2)
 
-        # Display the value of view_width along the left margin of the rectangle
+        # Draw lines and check for overflow
+        current_y = margin_top_y + actual_line_height
+        overflow = False
+
+        for i in range(total_lines):
+            if current_y + actual_line_height > y_offset + rect_height:
+                overflow = True
+                break
+            canvas.create_line(
+                x_offset, current_y,
+                x_offset + rect_width, current_y,
+                fill="lightgray", width=1
+            )
+            current_y += actual_line_height
+
+
+        # Display dimensions and lines
         canvas.create_text(
-            x_offset + 5, y_offset + rect_height / 2,  # Position it slightly to the left of the rectangle
-            text=f"{view_height} px",
-            angle=90,  # Rotate the text by 90 degrees
-            anchor="n",  # Anchor to the left
-            font=("Arial", 10)
+            x_offset + 5, y_offset + rect_height / 2,
+            text=f"{view_height} px", angle=90, anchor="n", font=("Arial", 10)
+        )
+        canvas.create_text(
+            x_offset + rect_width / 2, y_offset + 5,
+            text=f"{view_width} px", anchor="n", font=("Arial", 10)
+        )
+        canvas.create_text(
+            x_offset + rect_width / 2, y_offset + rect_height - 5,
+            text=f"{total_lines} Lines", anchor="s", font=("Arial", 10)
         )
 
-        # Display the value of view_height along the top margin of the rectangle
-        canvas.create_text(
-            x_offset + rect_width / 2, y_offset + 5,  # Position it below the top margin inside the rectangle
-            text=f"{view_width} px",
-            anchor="n",  # Anchor to the top
-            font=("Arial", 10)
-        )
+        # Show a warning if overflow occurs
+        if overflow:
+            warning_text = "⚠ Too Many Lines"
+            font_size = 14
+            warning_x = canvas.winfo_width() / 2
+            warning_y = canvas.winfo_height() / 2
 
-        # Display the total number of lines above the bottom margin inside the rectangle
-        canvas.create_text(
-            x_offset + rect_width / 2, y_offset + rect_height - 5,  # Position it above the bottom margin inside the rectangle
-            text=f"{total_lines} Lines",
-            anchor="s",  # Anchor to the bottom
-            font=("Arial", 10)
-        )
+            # Calculate text background dimensions
+            text_id = canvas.create_text(
+                warning_x, warning_y,
+                text=warning_text,
+                font=("Arial", font_size, "bold")
+            )
+            bbox = canvas.bbox(text_id)  # Get bounding box for the text
+            canvas.delete(text_id)  # Remove the temporary text
+            
+            # Draw white background rectangle
+            canvas.create_rectangle(
+                bbox[0] - 5, bbox[1] - 2,  # Slight padding
+                bbox[2] + 5, bbox[3] + 2,
+                fill="white", outline=""
+            )
+            
+            # Redraw the warning text
+            canvas.create_text(
+                warning_x, warning_y,
+                text=warning_text,
+                fill="red",
+                font=("Arial", font_size, "bold")
+            )
 
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
 
-
 def on_generate():
+    update_preview()
     try:
         # Get user inputs
         input_text = text_box.get("1.0", tk.END).strip()
@@ -188,7 +198,7 @@ def on_generate():
         if total_lines_per_page < lines_per_page:
             messagebox.showwarning(
                 "Input Error",
-                "Total Lines Per Page must not be lesser than Lines Per Page.",
+                "Total Lines Per Page must not be lesser than Lines Written Per Page.",
             )
             return
 
@@ -325,11 +335,11 @@ banner_label.grid(row=0, column=0, columnspan=2, pady=5)
 # Parameter input fields
 fields = [
     ("Line Length (characters)", "60"),
-    ("Written Lines Per Page", "24"),
+    ("Total Lines Per Page", "24"),
+    ("Lines Written Per Page", "24"),
     ("Handwriting Consistency", "0.95"),
     ("Pen Thickness", "1"),
     ("Line Height", "32"),
-    ("Total Lines Per Page", "24"),
     ("View Height", "896"),
     ("View Width", "633.472"),
     ("Margin Left", "64"),
@@ -350,7 +360,7 @@ for i, (label, default) in enumerate(fields):
 
 # Map entries to variables
 max_line_length_entry = entries["Line Length (characters)"]
-lines_per_page_entry = entries["Written Lines Per Page"]
+lines_per_page_entry = entries["Lines Written Per Page"]
 handwriting_consistency_entry = entries["Handwriting Consistency"]
 pen_thickness_entry = entries["Pen Thickness"]
 line_height_entry = entries["Line Height"]
