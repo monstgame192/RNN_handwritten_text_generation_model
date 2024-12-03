@@ -424,7 +424,7 @@ tk.Label(param_frame, text="Styles:").grid(
     row=len(fields) + 2, column=0, padx=10, pady=5, sticky="e"
 )
 styles_combobox = ttk.Combobox(
-    param_frame, values=[str(i) for i in range(1, 8)], state="readonly"
+    param_frame, values=[str(i) for i in range(1, 13)], state="readonly"
 )
 styles_combobox.set("1")  # Default value
 styles_combobox.grid(row=len(fields) + 2, column=1, padx=10, pady=5, sticky="ew")
