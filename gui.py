@@ -78,12 +78,22 @@ def update_preview():
         # Draw the white rectangle with width proportional to the user input values
         canvas.delete("all")  # Clear the canvas before drawing new rectangle
 
-        rect_height = value_frame.winfo_height() * 0.5  # 90% of the value_frame height
-        rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
+        if view_height > view_width:
+            rect_height = canvas.winfo_height() * 0.9  # 90% of the value_frame height
+            rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
+
+        else:
+            rect_width = canvas.winfo_width() * 0.9
+            rect_height = (view_height / view_width) * rect_width
+        
+        # Calculate the top-left corner to center the rectangle on the canvas
+        x_offset = (canvas.winfo_width() - rect_width) / 2
+        y_offset = (canvas.winfo_height() - rect_height) / 2
 
         # Draw the rectangle on the canvas
         canvas.create_rectangle(
-            margin_left, margin_top, margin_left + rect_width, margin_top + rect_height,
+            x_offset, y_offset, 
+            x_offset + rect_width, y_offset + rect_height,
             outline="black", fill="white"
         )
 
