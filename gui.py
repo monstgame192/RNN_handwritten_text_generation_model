@@ -307,6 +307,34 @@ def on_generate():
         messagebox.showerror("Error", str(e))
 
 
+def reset_default():
+    # Default values as per your 'fields' list
+    default_values = {
+        "Line Length (characters)": "60",
+        "Total Lines Per Page": "24",
+        "Lines Written Per Page": "24",
+        "Handwriting Consistency": "0.95",
+        "Pen Thickness": "1",
+        "Line Height": "32",
+        "View Height": "896",
+        "View Width": "633.472",
+        "Margin Left": "64",
+        "Margin Top": "96",
+    }
+
+    # Reset all entries to their default values
+    for label, default in default_values.items():
+        entries[label].delete(0, tk.END)
+        entries[label].insert(0, default)
+
+    # Reset the styles combobox to default value
+    styles_combobox.set("1")
+
+    # Optionally, you can reset the canvas or other UI components as well
+    canvas.delete("all")  # Clear the preview canvas
+    update_preview()
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Handwriting SVG Generator")
@@ -402,6 +430,11 @@ preview_button.grid(row=0, column=0, padx=10)
 
 generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
 generate_button.grid(row=0, column=1, padx=10)
+
+# Rest to Default button
+reset_button = ttk.Button(button_frame, text="Reset to Default", command=reset_default)
+reset_button.grid(row=0, column=2, padx=10)
+
 
 root.after(100, update_preview)
 
