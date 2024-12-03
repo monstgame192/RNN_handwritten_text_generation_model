@@ -1,7 +1,7 @@
 import os
 from handwriting_synthesis import Hand
 
-def process_text(input_file, output_dir, alphabet, max_line_length, lines_per_page, biases, styles, stroke_widths):
+def process_text(input_file, output_dir, alphabet, max_line_length, lines_per_page, biases, styles, stroke_widths, page):
     """
     Processes text from an input file, sanitizes, wraps, paginates it,
     and generates handwriting SVG files.
@@ -56,6 +56,7 @@ def process_text(input_file, output_dir, alphabet, max_line_length, lines_per_pa
             biases=[biases] * len(page_lines),
             styles=[styles] * len(page_lines),
             stroke_widths=[stroke_widths] * len(page_lines),
+            page=page
         )
         print(f"Page {page_num + 1} written to {filename}")
 
@@ -73,15 +74,25 @@ def main():
         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
         'y', 'z'
     ]
+
     max_line_length = 60                 # Maximum characters per line
     lines_per_page = 24                  # Lines per page
     biases = 0.95                        # Handwriting bias
-    styles = 7                           # Handwriting style
+    styles = 1                           # Handwriting style
     stroke_widths = 1                    # Stroke width for handwriting
+
+    # Page parameters to be stored in page array
+    line_height = 32
+    total_lines_per_page = 24
+    view_height = 896
+    view_width = view_height * 0.707 # Ratio for a4 paper
+
+    page = [line_height, total_lines_per_page, view_height, view_width]
+
 
     # Call the process_text function
     try:
-        process_text(input_file, output_dir, alphabet, max_line_length, lines_per_page, biases, styles, stroke_widths)
+        process_text(input_file, output_dir, alphabet, max_line_length, lines_per_page, biases, styles, stroke_widths, page)
     except FileNotFoundError as e:
         print(e)
         exit(1)

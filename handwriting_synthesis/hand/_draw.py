@@ -4,14 +4,11 @@ import cairosvg
 
 from handwriting_synthesis import drawing
 
-def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None):
+def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None, page = None):
     stroke_colors = stroke_colors or ['black'] * len(lines)
     stroke_widths = stroke_widths or [2] * len(lines)
     
-    line_height = 32
-    total_lines_per_page = 28  # Fixed number of lines per page
-    view_height = line_height * total_lines_per_page
-    view_width = view_height * 0.707 # ratio for a4 paper
+    line_height, total_lines_per_page, view_height, view_width = page or [32, 24, 896, 632]
 
 
     # Initialize the SVG drawing
