@@ -69,33 +69,26 @@ def process_text(
 def update_preview():
     try:
         # Get user inputs
-        max_line_length = int(max_line_length_entry.get())
-        lines_per_page = int(lines_per_page_entry.get())
-        line_height = int(line_height_entry.get())
-        total_lines_per_page = int(total_lines_entry.get())
         view_height = float(view_height_entry.get())
         view_width = float(view_width_entry.get())
         margin_left = int(margin_left_entry.get())
         margin_top = int(margin_top_entry.get())
 
-        # Check if the total lines per page is not less than the lines per page
-        if total_lines_per_page < lines_per_page:
-            messagebox.showwarning(
-                "Input Error",
-                "Total Lines Per Page must not be lesser than Lines Per Page.",
-            )
-            return
 
-        # Update the bottom half of the right side with current values
-        height_value.set(view_height)
-        width_value.set(view_width)
-        margin_left_value.set(margin_left)
-        margin_top_value.set(margin_top)
-        total_lines_value.set(total_lines_per_page)
+        # Draw the white rectangle with width proportional to the user input values
+        canvas.delete("all")  # Clear the canvas before drawing new rectangle
+
+        rect_height = value_frame.winfo_height() * 0.5  # 90% of the value_frame height
+        rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
+
+        # Draw the rectangle on the canvas
+        canvas.create_rectangle(
+            margin_left, margin_top, margin_left + rect_width, margin_top + rect_height,
+            outline="black", fill="white"
+        )
 
     except Exception as e:
         messagebox.showerror("Error", str(e))
-
 
 def on_generate():
     try:
@@ -306,35 +299,13 @@ styles_combobox.grid(row=len(fields) + 2, column=1, padx=10, pady=5, sticky="ew"
 value_frame = tk.Frame(input_frame)
 value_frame.pack(padx=10, pady=5, fill="both", expand=True)
 
-# Labels and values for height, width, margins, and total lines
-height_value = tk.StringVar(value="896.0")
-width_value = tk.StringVar(value="633.472")
-margin_left_value = tk.StringVar(value="64")
-margin_top_value = tk.StringVar(value="96")
-total_lines_value = tk.StringVar(value="24")
+# Display values on right side (bottom section)
+value_frame = tk.Frame(input_frame)
+value_frame.pack(padx=10, pady=5, fill="both", expand=True)
 
-tk.Label(value_frame, text="Height:").grid(row=0, column=0, padx=5, pady=5)
-tk.Label(value_frame, textvariable=height_value).grid(row=0, column=1, padx=5, pady=5)
-
-tk.Label(value_frame, text="Width:").grid(row=1, column=0, padx=5, pady=5)
-tk.Label(value_frame, textvariable=width_value).grid(row=1, column=1, padx=5, pady=5)
-
-tk.Label(value_frame, text="Margin Left:").grid(row=2, column=0, padx=5, pady=5)
-tk.Label(value_frame, textvariable=margin_left_value).grid(
-    row=2, column=1, padx=5, pady=5
-)
-
-tk.Label(value_frame, text="Margin Top:").grid(row=3, column=0, padx=5, pady=5)
-tk.Label(value_frame, textvariable=margin_top_value).grid(
-    row=3, column=1, padx=5, pady=5
-)
-
-tk.Label(value_frame, text="Total Lines Per Page:").grid(
-    row=4, column=0, padx=5, pady=5
-)
-tk.Label(value_frame, textvariable=total_lines_value).grid(
-    row=4, column=1, padx=5, pady=5
-)
+# Add Canvas to draw the white rectangle in the bottom section of input_frame
+canvas = tk.Canvas(value_frame, bg="white")
+canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
@@ -346,6 +317,8 @@ preview_button.grid(row=0, column=0, padx=10)
 
 generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
 generate_button.grid(row=0, column=1, padx=10)
+
+
 
 # Run the GUI
 root.mainloop()
