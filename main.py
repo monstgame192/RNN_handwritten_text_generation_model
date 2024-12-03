@@ -86,8 +86,10 @@ def main():
     total_lines_per_page = 24
     view_height = 896
     view_width = view_height * 0.707 # Ratio for a4 paper
+    margin_left = -64
+    margin_top = -96
 
-    page = [line_height, total_lines_per_page, view_height, view_width]
+    page = [line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top]
 
 
     # Call the process_text function

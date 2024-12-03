@@ -8,7 +8,7 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None, page
     stroke_colors = stroke_colors or ['black'] * len(lines)
     stroke_widths = stroke_widths or [2] * len(lines)
     
-    line_height, total_lines_per_page, view_height, view_width = page or [32, 24, 896, 632]
+    line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top = page or [32, 24, 896, 632, -64, -96]
 
 
     # Initialize the SVG drawing
@@ -16,8 +16,6 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None, page
     dwg.viewbox(width=view_width, height=view_height)
     dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill='white'))
 
-    margin_left = -2 * line_height
-    margin_top = -3 * line_height
 
     # Draw fixed number of ruled lines
     for i in range(total_lines_per_page):
