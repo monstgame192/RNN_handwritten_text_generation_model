@@ -1,6 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, messagebox
 from tkinter import PhotoImage  # To handle the image
 from handwriting_synthesis import Hand
 
@@ -49,6 +49,34 @@ def process_text(input_text, output_dir, alphabet, max_line_length, lines_per_pa
             page=page
         )
         print(f"Page {page_num + 1} written to {filename}")
+
+
+def update_preview():
+    try:
+        # Get user inputs
+        max_line_length = int(max_line_length_entry.get())
+        lines_per_page = int(lines_per_page_entry.get())
+        line_height = int(line_height_entry.get())
+        total_lines_per_page = int(total_lines_entry.get())
+        view_height = int(view_height_entry.get())
+        view_width = float(view_width_entry.get())
+        margin_left = int(margin_left_entry.get())
+        margin_top = int(margin_top_entry.get())
+
+        # Check if the total lines per page is not less than the lines per page
+        if total_lines_per_page < lines_per_page:
+            messagebox.showwarning("Input Error", "Total Lines Per Page must not be lesser than Lines Per Page.")
+            return
+
+        # Update the bottom half of the right side with current values
+        height_value.set(line_height)
+        width_value.set(view_width)
+        margin_left_value.set(margin_left)
+        margin_top_value.set(margin_top)
+        total_lines_value.set(total_lines_per_page)
+
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 
 def on_generate():
@@ -100,14 +128,13 @@ def on_generate():
 # Create the main window
 root = tk.Tk()
 root.title("Handwriting SVG Generator")
-root.geometry("800x600")  # Fixed window size
 root.resizable(False, False)
 
 # Load image for banner
 banner_image = PhotoImage(file="assets/banner.png")  # Adjust the path to your image
 
 # Frame for text input (right half)
-input_frame = tk.Frame(root, width=400, height=600)
+input_frame = tk.Frame(root, width=500, height=600)
 input_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 # Text input box
@@ -116,13 +143,16 @@ text_box = tk.Text(input_frame, wrap="word", width=40, height=20)
 text_box.pack(padx=10, pady=5, fill="both", expand=True)
 
 # Frame for parameter inputs (left half)
-param_frame = tk.Frame(root, width=400, height=600)
+param_frame = tk.Frame(root, width=500, height=600)
 param_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-
 
 # Add the banner image at the top of the parameter frame
 banner_label = tk.Label(param_frame, image=banner_image)
 banner_label.grid(row=0, column=0, columnspan=2, pady=5)
+
+# Preview Button
+preview_button = ttk.Button(param_frame, text="Preview", command=update_preview)
+preview_button.grid(row=1, column=0, columnspan=2, pady=10)
 
 # Parameter input fields
 fields = [
@@ -133,12 +163,11 @@ fields = [
 entries = {}
 
 for i, (label, default) in enumerate(fields):
-    tk.Label(param_frame, text=f"{label}:").grid(row=i+1, column=0, padx=10, pady=5, sticky="e")
+    tk.Label(param_frame, text=f"{label}:").grid(row=i+2, column=0, padx=10, pady=5, sticky="e")
     entry = ttk.Entry(param_frame)
     entry.insert(0, default)
-    entry.grid(row=i+1, column=1, padx=10, pady=5)
+    entry.grid(row=i+2, column=1, padx=10, pady=5, sticky="ew")  # Added sticky="ew" for stretch
     entries[label] = entry
-
 
 # Map entries to variables
 max_line_length_entry = entries["Line Length (characters)"]
@@ -153,17 +182,39 @@ margin_left_entry = entries["Margin Left"]
 margin_top_entry = entries["Margin Top"]
 
 # Styles dropdown (combobox)
-tk.Label(param_frame, text="Styles:").grid(row=len(fields)+1, column=0, padx=10, pady=5, sticky="e")
+tk.Label(param_frame, text="Styles:").grid(row=len(fields)+2, column=0, padx=10, pady=5, sticky="e")
 styles_combobox = ttk.Combobox(param_frame, values=[str(i) for i in range(1, 8)], state="readonly")
 styles_combobox.set("1")  # Default value
-styles_combobox.grid(row=len(fields)+1, column=1, padx=10, pady=5)
+styles_combobox.grid(row=len(fields)+2, column=1, padx=10, pady=5, sticky="ew")
 
-# Generate button
-generate_button = ttk.Button(param_frame, text="Generate", command=on_generate)
-generate_button.grid(row=len(fields)+2, column=0, columnspan=2, pady=10)
+# Display values on right side (bottom section)
+value_frame = tk.Frame(input_frame)
+value_frame.pack(padx=10, pady=5, fill="both", expand=True)
 
-root.grid_rowconfigure(0, weight=1)
-root.grid_columnconfigure(0, weight=1)
-root.grid_columnconfigure(1, weight=1)
+# Labels and values for height, width, margins, and total lines
+height_value = tk.StringVar(value="32")
+width_value = tk.StringVar(value="633.472")
+margin_left_value = tk.StringVar(value="-64")
+margin_top_value = tk.StringVar(value="-96")
+total_lines_value = tk.StringVar(value="24")
+
+tk.Label(value_frame, text="Height:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
+tk.Label(value_frame, textvariable=height_value).grid(row=0, column=1, padx=10, pady=5, sticky="w")
+
+tk.Label(value_frame, text="Width:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
+tk.Label(value_frame, textvariable=width_value).grid(row=1, column=1, padx=10, pady=5, sticky="w")
+
+tk.Label(value_frame, text="Margin Left:").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+tk.Label(value_frame, textvariable=margin_left_value).grid(row=2, column=1, padx=10, pady=5, sticky="w")
+
+tk.Label(value_frame, text="Margin Top:").grid(row=3, column=0, padx=10, pady=5, sticky="e")
+tk.Label(value_frame, textvariable=margin_top_value).grid(row=3, column=1, padx=10, pady=5, sticky="w")
+
+tk.Label(value_frame, text="Total Lines:").grid(row=4, column=0, padx=10, pady=5, sticky="e")
+tk.Label(value_frame, textvariable=total_lines_value).grid(row=4, column=1, padx=10, pady=5, sticky="w")
+
+# Generate Button
+generate_button = ttk.Button(root, text="Generate Handwriting SVGs", command=on_generate)
+generate_button.grid(row=1, column=0, columnspan=2, pady=20)
 
 root.mainloop()
