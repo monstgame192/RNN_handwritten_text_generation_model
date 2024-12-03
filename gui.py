@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+from tkinter import PhotoImage  # To handle the image
 from handwriting_synthesis import Hand
 
 
@@ -60,15 +61,19 @@ def on_generate():
         # Parameters
         max_line_length = int(max_line_length_entry.get())
         lines_per_page = int(lines_per_page_entry.get())
-        biases = float(biases_entry.get())
-        styles = int(styles_entry.get())
-        stroke_widths = float(stroke_widths_entry.get())
+        handwriting_consistency = float(handwriting_consistency_entry.get())
+        styles = int(styles_combobox.get())
+        pen_thickness = float(pen_thickness_entry.get())
         line_height = int(line_height_entry.get())
         total_lines_per_page = int(total_lines_entry.get())
         view_height = int(view_height_entry.get())
         view_width = float(view_width_entry.get())
         margin_left = int(margin_left_entry.get())
         margin_top = int(margin_top_entry.get())
+
+        if total_lines_per_page < lines_per_page:
+            messagebox.showwarning("Input Error", "Total Lines Per Page must not be lesser than Lines Per Page.")
+            return
 
         # Page layout
         page = [line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top]
@@ -85,7 +90,7 @@ def on_generate():
         ]
 
         # Process text
-        process_text(input_text, output_dir, alphabet, max_line_length, lines_per_page, biases, styles, stroke_widths, page)
+        process_text(input_text, output_dir, alphabet, max_line_length, lines_per_page, handwriting_consistency, styles, pen_thickness, page)
         messagebox.showinfo("Success", "Handwriting SVG files generated successfully!")
 
     except Exception as e:
@@ -95,33 +100,51 @@ def on_generate():
 # Create the main window
 root = tk.Tk()
 root.title("Handwriting SVG Generator")
+root.geometry("800x600")  # Fixed window size
+root.resizable(False, False)
+
+# Load image for banner
+banner_image = PhotoImage(file="assets/banner.png")  # Adjust the path to your image
+
+# Frame for text input (right half)
+input_frame = tk.Frame(root, width=400, height=600)
+input_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 # Text input box
-tk.Label(root, text="Input Text:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
-text_box = tk.Text(root, width=60, height=10)
-text_box.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
+tk.Label(input_frame, text="Input Text:").pack(padx=10, pady=5, anchor="w")
+text_box = tk.Text(input_frame, wrap="word", width=40, height=20)
+text_box.pack(padx=10, pady=5, fill="both", expand=True)
+
+# Frame for parameter inputs (left half)
+param_frame = tk.Frame(root, width=400, height=600)
+param_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+
+# Add the banner image at the top of the parameter frame
+banner_label = tk.Label(param_frame, image=banner_image)
+banner_label.grid(row=0, column=0, columnspan=2, pady=5)
 
 # Parameter input fields
 fields = [
-    ("Max Line Length", "60"), ("Lines Per Page", "24"), ("Biases", "0.95"), ("Styles", "1"),
-    ("Stroke Widths", "1"), ("Line Height", "32"), ("Total Lines Per Page", "24"),
+    ("Line Length (characters)", "60"), ("Lines Per Page", "24"), ("Handwriting Consistency", "0.95"), ("Styles", "1"),
+    ("Pen Thickness", "1"), ("Line Height", "32"), ("Total Lines Per Page", "24"),
     ("View Height", "896"), ("View Width", "633.472"), ("Margin Left", "-64"), ("Margin Top", "-96")
 ]
 entries = {}
 
 for i, (label, default) in enumerate(fields):
-    tk.Label(root, text=f"{label}:").grid(row=2 + i, column=0, padx=10, pady=5, sticky="e")
-    entry = ttk.Entry(root)
+    tk.Label(param_frame, text=f"{label}:").grid(row=i+1, column=0, padx=10, pady=5, sticky="e")
+    entry = ttk.Entry(param_frame)
     entry.insert(0, default)
-    entry.grid(row=2 + i, column=1, padx=10, pady=5)
+    entry.grid(row=i+1, column=1, padx=10, pady=5)
     entries[label] = entry
 
+
 # Map entries to variables
-max_line_length_entry = entries["Max Line Length"]
+max_line_length_entry = entries["Line Length (characters)"]
 lines_per_page_entry = entries["Lines Per Page"]
-biases_entry = entries["Biases"]
-styles_entry = entries["Styles"]
-stroke_widths_entry = entries["Stroke Widths"]
+handwriting_consistency_entry = entries["Handwriting Consistency"]
+pen_thickness_entry = entries["Pen Thickness"]
 line_height_entry = entries["Line Height"]
 total_lines_entry = entries["Total Lines Per Page"]
 view_height_entry = entries["View Height"]
@@ -129,8 +152,18 @@ view_width_entry = entries["View Width"]
 margin_left_entry = entries["Margin Left"]
 margin_top_entry = entries["Margin Top"]
 
+# Styles dropdown (combobox)
+tk.Label(param_frame, text="Styles:").grid(row=len(fields)+1, column=0, padx=10, pady=5, sticky="e")
+styles_combobox = ttk.Combobox(param_frame, values=[str(i) for i in range(1, 8)], state="readonly")
+styles_combobox.set("1")  # Default value
+styles_combobox.grid(row=len(fields)+1, column=1, padx=10, pady=5)
+
 # Generate button
-generate_button = ttk.Button(root, text="Generate", command=on_generate)
-generate_button.grid(row=2 + len(fields), column=0, columnspan=2, pady=10)
+generate_button = ttk.Button(param_frame, text="Generate", command=on_generate)
+generate_button.grid(row=len(fields)+2, column=0, columnspan=2, pady=10)
+
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
+root.grid_columnconfigure(1, weight=1)
 
 root.mainloop()
