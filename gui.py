@@ -334,6 +334,9 @@ def reset_default():
     canvas.delete("all")  # Clear the preview canvas
     update_preview()
 
+# Update the style value label when the style selection changes
+def update_style_label(event=None):
+    style_value_label.config(text=styles_combobox.get())
 
 # Create the main window
 root = tk.Tk()
@@ -434,6 +437,19 @@ generate_button.grid(row=0, column=1, padx=10)
 # Rest to Default button
 reset_button = ttk.Button(button_frame, text="Reset to Default", command=reset_default)
 reset_button.grid(row=0, column=2, padx=10)
+
+# Create a frame for the style display (below the buttons in the left section)
+style_frame = tk.Frame(param_frame)
+style_frame.grid(row=len(fields) + 4, column=0, columnspan=2, pady=10)
+
+# Label to display the selected style
+style_label = tk.Label(style_frame, text="Selected Style: ")
+style_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+
+# Label to show the selected style value
+style_value_label = tk.Label(style_frame, text=styles_combobox.get())
+style_value_label.grid(row=0, column=1, padx=10, pady=5, sticky="w")
+styles_combobox.bind("<<ComboboxSelected>>", update_style_label)
 
 
 root.after(100, update_preview)
