@@ -19,7 +19,7 @@ def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None, page
 
     # Draw fixed number of ruled lines
     for i in range(total_lines_per_page):
-        y_position = line_height * (i + 1) - line_height - margin_top # Adjust as needed to align with text
+        y_position = line_height * (i + 1) - margin_top # Adjust as needed to align with text
         dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke='lightgray', stroke_width=1))
 
     dwg.add(dwg.line(start=(-margin_left + line_height/2, 0), end=(-margin_left + line_height/2, view_height), stroke='red', stroke_width=1))
