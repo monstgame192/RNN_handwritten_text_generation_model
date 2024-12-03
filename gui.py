@@ -150,10 +150,6 @@ param_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 banner_label = tk.Label(param_frame, image=banner_image)
 banner_label.grid(row=0, column=0, columnspan=2, pady=5)
 
-# Preview Button
-preview_button = ttk.Button(param_frame, text="Preview", command=update_preview)
-preview_button.grid(row=1, column=0, columnspan=2, pady=10)
-
 # Parameter input fields
 fields = [
     ("Line Length (characters)", "60"), ("Lines Per Page", "24"), ("Handwriting Consistency", "0.95"), ("Styles", "1"),
@@ -198,23 +194,31 @@ margin_left_value = tk.StringVar(value="-64")
 margin_top_value = tk.StringVar(value="-96")
 total_lines_value = tk.StringVar(value="24")
 
-tk.Label(value_frame, text="Height:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
-tk.Label(value_frame, textvariable=height_value).grid(row=0, column=1, padx=10, pady=5, sticky="w")
+tk.Label(value_frame, text="Height:").grid(row=0, column=0, padx=5, pady=5)
+tk.Label(value_frame, textvariable=height_value).grid(row=0, column=1, padx=5, pady=5)
 
-tk.Label(value_frame, text="Width:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
-tk.Label(value_frame, textvariable=width_value).grid(row=1, column=1, padx=10, pady=5, sticky="w")
+tk.Label(value_frame, text="Width:").grid(row=1, column=0, padx=5, pady=5)
+tk.Label(value_frame, textvariable=width_value).grid(row=1, column=1, padx=5, pady=5)
 
-tk.Label(value_frame, text="Margin Left:").grid(row=2, column=0, padx=10, pady=5, sticky="e")
-tk.Label(value_frame, textvariable=margin_left_value).grid(row=2, column=1, padx=10, pady=5, sticky="w")
+tk.Label(value_frame, text="Margin Left:").grid(row=2, column=0, padx=5, pady=5)
+tk.Label(value_frame, textvariable=margin_left_value).grid(row=2, column=1, padx=5, pady=5)
 
-tk.Label(value_frame, text="Margin Top:").grid(row=3, column=0, padx=10, pady=5, sticky="e")
-tk.Label(value_frame, textvariable=margin_top_value).grid(row=3, column=1, padx=10, pady=5, sticky="w")
+tk.Label(value_frame, text="Margin Top:").grid(row=3, column=0, padx=5, pady=5)
+tk.Label(value_frame, textvariable=margin_top_value).grid(row=3, column=1, padx=5, pady=5)
 
-tk.Label(value_frame, text="Total Lines:").grid(row=4, column=0, padx=10, pady=5, sticky="e")
-tk.Label(value_frame, textvariable=total_lines_value).grid(row=4, column=1, padx=10, pady=5, sticky="w")
+tk.Label(value_frame, text="Total Lines Per Page:").grid(row=4, column=0, padx=5, pady=5)
+tk.Label(value_frame, textvariable=total_lines_value).grid(row=4, column=1, padx=5, pady=5)
 
-# Generate Button
-generate_button = ttk.Button(root, text="Generate Handwriting SVGs", command=on_generate)
-generate_button.grid(row=1, column=0, columnspan=2, pady=20)
+# Buttons for preview and generate
+button_frame = tk.Frame(param_frame)
+button_frame.grid(row=len(fields)+3, column=0, columnspan=2, pady=10)
 
+# Add Preview and Generate buttons
+preview_button = ttk.Button(button_frame, text="Preview", command=update_preview)
+preview_button.grid(row=0, column=0, padx=10)
+
+generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
+generate_button.grid(row=0, column=1, padx=10)
+
+# Run the GUI
 root.mainloop()
