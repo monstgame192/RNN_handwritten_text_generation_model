@@ -84,7 +84,7 @@ def update_preview():
             rect_height = canvas.winfo_height() * 0.9  # 90% of the canvas height
             rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
         else:
-            rect_width = canvas.winfo_width() * 0.9  # 90% of the canvas width
+            rect_width = canvas.winfo_width() * 0.5  # 90% of the canvas width
             rect_height = (view_height / view_width) * rect_width  # Proportional height based on the user's view values
 
         # Calculate the top-left corner to center the rectangle on the canvas
@@ -393,7 +393,7 @@ preview_button.grid(row=0, column=0, padx=10)
 generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
 generate_button.grid(row=0, column=1, padx=10)
 
-
+root.after(100, update_preview)
 
 # Run the GUI
 root.mainloop()
