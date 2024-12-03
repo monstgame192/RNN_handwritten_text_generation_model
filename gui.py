@@ -58,7 +58,7 @@ def update_preview():
         lines_per_page = int(lines_per_page_entry.get())
         line_height = int(line_height_entry.get())
         total_lines_per_page = int(total_lines_entry.get())
-        view_height = int(view_height_entry.get())
+        view_height = float(view_height_entry.get())
         view_width = float(view_width_entry.get())
         margin_left = int(margin_left_entry.get())
         margin_top = int(margin_top_entry.get())
@@ -69,7 +69,7 @@ def update_preview():
             return
 
         # Update the bottom half of the right side with current values
-        height_value.set(line_height)
+        height_value.set(view_height)
         width_value.set(view_width)
         margin_left_value.set(margin_left)
         margin_top_value.set(margin_top)
@@ -94,10 +94,10 @@ def on_generate():
         pen_thickness = float(pen_thickness_entry.get())
         line_height = int(line_height_entry.get())
         total_lines_per_page = int(total_lines_entry.get())
-        view_height = int(view_height_entry.get())
+        view_height = float(view_height_entry.get())
         view_width = float(view_width_entry.get())
-        margin_left = int(margin_left_entry.get())
-        margin_top = int(margin_top_entry.get())
+        margin_left = int(margin_left_entry.get()) * -1
+        margin_top = int(margin_top_entry.get()) * -1
 
         if total_lines_per_page < lines_per_page:
             messagebox.showwarning("Input Error", "Total Lines Per Page must not be lesser than Lines Per Page.")
@@ -188,10 +188,10 @@ value_frame = tk.Frame(input_frame)
 value_frame.pack(padx=10, pady=5, fill="both", expand=True)
 
 # Labels and values for height, width, margins, and total lines
-height_value = tk.StringVar(value="32")
+height_value = tk.StringVar(value="896.0")
 width_value = tk.StringVar(value="633.472")
-margin_left_value = tk.StringVar(value="-64")
-margin_top_value = tk.StringVar(value="-96")
+margin_left_value = tk.StringVar(value="64")
+margin_top_value = tk.StringVar(value="96")
 total_lines_value = tk.StringVar(value="24")
 
 tk.Label(value_frame, text="Height:").grid(row=0, column=0, padx=5, pady=5)
