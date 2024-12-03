@@ -73,19 +73,20 @@ def update_preview():
         view_width = float(view_width_entry.get())
         margin_left = int(margin_left_entry.get())
         margin_top = int(margin_top_entry.get())
+        total_lines = int(total_lines_entry.get())
+        line_height_input = int(line_height_entry.get())  # Get the line height from user input
 
+        # Clear the canvas before drawing a new rectangle
+        canvas.delete("all")
 
-        # Draw the white rectangle with width proportional to the user input values
-        canvas.delete("all")  # Clear the canvas before drawing new rectangle
-
+        # Calculate the rectangle size based on view_height and view_width
         if view_height > view_width:
-            rect_height = canvas.winfo_height() * 0.9  # 90% of the value_frame height
+            rect_height = canvas.winfo_height() * 0.9  # 90% of the canvas height
             rect_width = (view_width / view_height) * rect_height  # Proportional width based on the user's view values
-
         else:
-            rect_width = canvas.winfo_width() * 0.9
-            rect_height = (view_height / view_width) * rect_width
-        
+            rect_width = canvas.winfo_width() * 0.9  # 90% of the canvas width
+            rect_height = (view_height / view_width) * rect_width  # Proportional height based on the user's view values
+
         # Calculate the top-left corner to center the rectangle on the canvas
         x_offset = (canvas.winfo_width() - rect_width) / 2
         y_offset = (canvas.winfo_height() - rect_height) / 2
@@ -97,8 +98,73 @@ def update_preview():
             outline="black", fill="white"
         )
 
+        margin_left_ratio = margin_left / view_width
+        margin_top_ratio = margin_top / view_height
+
+        # Calculate the actual pixel positions for the margins
+        margin_left_x = x_offset + rect_width * margin_left_ratio  # Position of the left margin (vertical line)
+        margin_top_y = y_offset + rect_height * margin_top_ratio  # Position of the top margin (horizontal line)
+
+        # Draw the red left margin vertical line
+        canvas.create_line(
+            margin_left_x, y_offset,  # Starting point of the vertical line (top of the rectangle)
+            margin_left_x, y_offset + rect_height,  # Ending point of the vertical line (bottom of the rectangle)
+            fill="red", width=2
+        )
+
+        # Draw the red top margin horizontal line
+        canvas.create_line(
+            x_offset, margin_top_y,  # Starting point of the horizontal line (left side of the rectangle)
+            x_offset + rect_width, margin_top_y,  # Ending point of the horizontal line (right side of the rectangle)
+            fill="red", width=2
+        )
+
+        # Draw light gray horizontal lines starting from the top margin + line height
+        line_height_ratio = line_height_input / view_height  # Line height as a ratio of the view height
+        actual_line_height = rect_height * line_height_ratio  # Convert to pixel value
+
+        # Calculate the starting position for the first horizontal line
+        current_y = margin_top_y + actual_line_height
+
+        # Draw the lines
+        for _ in range(total_lines):
+            canvas.create_line(
+                x_offset, current_y,
+                x_offset + rect_width, current_y,
+                fill="lightgray", width=1
+            )
+            current_y += actual_line_height  # Move down for the next line
+
+        # Display the value of view_width along the left margin of the rectangle
+        canvas.create_text(
+            x_offset + 5, y_offset + rect_height / 2,  # Position it slightly to the left of the rectangle
+            text=f"{view_height} px",
+            angle=90,  # Rotate the text by 90 degrees
+            anchor="n",  # Anchor to the left
+            font=("Arial", 10)
+        )
+
+        # Display the value of view_height along the top margin of the rectangle
+        canvas.create_text(
+            x_offset + rect_width / 2, y_offset + 5,  # Position it below the top margin inside the rectangle
+            text=f"{view_width} px",
+            anchor="n",  # Anchor to the top
+            font=("Arial", 10)
+        )
+
+        # Display the total number of lines above the bottom margin inside the rectangle
+        canvas.create_text(
+            x_offset + rect_width / 2, y_offset + rect_height - 5,  # Position it above the bottom margin inside the rectangle
+            text=f"{total_lines} Lines",
+            anchor="s",  # Anchor to the bottom
+            font=("Arial", 10)
+        )
+
+
     except Exception as e:
         messagebox.showerror("Error", str(e))
+
+
 
 def on_generate():
     try:
