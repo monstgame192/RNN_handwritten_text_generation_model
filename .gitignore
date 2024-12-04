@@ -9,5 +9,5 @@ predictions
 .idea
 venv
 img
-
+__pycache__
 /_main.py
