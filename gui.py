@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter import PhotoImage  # To handle the image
 from handwriting_synthesis import Hand
+from tkinter.colorchooser import askcolor
 
 
 def process_text(
@@ -306,6 +307,12 @@ def on_generate():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+def choose_page_color():
+    # Open color picker dialog to select page background color
+    color = askcolor()[1]
+    if color:
+        # Update canvas background with selected color
+        canvas.config(bg=color)
 
 def reset_default():
     # Default values as per your 'fields' list
@@ -398,12 +405,12 @@ entries = {}
 
 for i, (label, default) in enumerate(fields):
     tk.Label(param_frame, text=f"{label}:").grid(
-        row=i + 2, column=0, padx=10, pady=5, sticky="e"
+        row=i + 2, column=0, padx=5, pady=5, sticky="e"
     )
     entry = ttk.Entry(param_frame)
     entry.insert(0, default)
     entry.grid(
-        row=i + 2, column=1, padx=10, pady=5, sticky="ew"
+        row=i + 2, column=1, padx=5, pady=5, sticky="ew"
     )  # Added sticky="ew" for stretch
     entries[label] = entry
 
@@ -421,13 +428,28 @@ margin_top_entry = entries["Margin Top"]
 
 # Styles dropdown (combobox)
 tk.Label(param_frame, text="Styles:").grid(
-    row=len(fields) + 2, column=0, padx=10, pady=5, sticky="e"
+    row=len(fields) + 2, column=0, padx=5, pady=5, sticky="e"
 )
 styles_combobox = ttk.Combobox(
     param_frame, values=[str(i) for i in range(1, 13)], state="readonly"
 )
 styles_combobox.set("1")  # Default value
-styles_combobox.grid(row=len(fields) + 2, column=1, padx=10, pady=5, sticky="ew")
+styles_combobox.grid(row=len(fields) + 2, column=1, padx=5, pady=5, sticky="ew")
+
+# Color dropdown (combobox)
+tk.Label(param_frame, text="Ink Color:").grid(
+    row=len(fields) + 3, column=0, padx=5, pady=5, sticky="e"
+)
+styles_combobox = ttk.Combobox(
+    param_frame, values=["Black", "Blue", "Red", "Green"], state="readonly"
+)
+styles_combobox.set("1")  # Default value
+styles_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
+
+# Page Color Selection
+page_color_button = ttk.Button(param_frame, text="Select Page Color", command=choose_page_color)
+page_color_button.grid(row=len(fields) + 4, column=0, columnspan=2, pady=10, padx=5)
+
 
 # Display values on right side (bottom section)
 value_frame = tk.Frame(input_frame)
@@ -443,22 +465,28 @@ canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
-button_frame.grid(row=len(fields) + 3, column=0, columnspan=2, pady=10)
+button_frame.grid(row=len(fields) + 5, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
+
+# Configure columns to expand equally
+button_frame.grid_columnconfigure(0, weight=1)
+button_frame.grid_columnconfigure(1, weight=1)
+button_frame.grid_columnconfigure(2, weight=1)
 
 # Add Preview and Generate buttons
 preview_button = ttk.Button(button_frame, text="Preview", command=update_preview)
-preview_button.grid(row=0, column=0, padx=10)
+preview_button.grid(row=0, column=0, sticky="ew", padx=5)
 
 generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
-generate_button.grid(row=0, column=1, padx=10)
+generate_button.grid(row=0, column=1, sticky="ew", padx=5)
 
 # Rest to Default button
 reset_button = ttk.Button(button_frame, text="Reset to Default", command=reset_default)
-reset_button.grid(row=0, column=2, padx=10)
+reset_button.grid(row=0, column=2, sticky="ew", padx=5)
+
 
 # Create a frame for the style display (below the buttons in the left section)
 style_frame = tk.Frame(param_frame)
-style_frame.grid(row=len(fields) + 4, column=0, columnspan=2, pady=10)
+style_frame.grid(row=len(fields) + 6, column=0, columnspan=2, pady=10)
 
 # Label to show the selected style value (now will display an image)
 style_value_label = tk.Label(style_frame)
