@@ -68,9 +68,10 @@ def process_text(
 
 margin_left_line = None
 margin_top_line = None
+page_preview = None
 
 def update_preview():
-    global margin_left_line, margin_top_line  # Access the global variables
+    global margin_left_line, margin_top_line, page_preview  # Access the global variables
     try:
         # Get user inputs
         view_height = float(view_height_entry.get())
@@ -105,7 +106,7 @@ def update_preview():
         actual_line_height = rect_height * line_height_ratio
 
         # Draw rectangle and margins
-        canvas.create_rectangle(
+        page_preview = canvas.create_rectangle(
             x_offset, y_offset, 
             x_offset + rect_width, y_offset + rect_height,
             outline="black", fill=""
@@ -317,11 +318,13 @@ def on_generate():
         messagebox.showerror("Error", str(e))
 
 def choose_page_color():
+    global page_preview # Access the global page preview rectangle
     # Open color picker dialog to select page background color
     color = askcolor()[1]
-    if color:
-        # Update canvas background with selected color
-        canvas.config(bg=color)
+    if color and page_preview:
+        # Update the page preview rectangle with the selected color
+        canvas.itemconfig(page_preview, fill=color)
+        print(f"Selected Page Color: {color}")
 
 def choose_margin_color():
     global margin_left_line, margin_top_line  # Access the global margin lines
@@ -473,14 +476,14 @@ tk.Label(param_frame, text="Page Color:").grid(
     row=len(fields) + 4, column=0, padx=5, pady=5, sticky="e"
 )
 page_color_button = ttk.Button(param_frame, text="Select Page Color", command=choose_page_color)
-page_color_button.grid(row=len(fields) + 4, column=1, columnspan=2, pady=10, padx=5, sticky="ew")
+page_color_button.grid(row=len(fields) + 4, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
 # Margin Color Selection
 tk.Label(param_frame, text="Margin Color:").grid(
     row=len(fields) + 5, column=0, padx=5, pady=5, sticky="e"
 )
 page_color_button = ttk.Button(param_frame, text="Select Margin Color", command=choose_margin_color)
-page_color_button.grid(row=len(fields) + 5, column=1, columnspan=2, pady=10, padx=5, sticky="ew")
+page_color_button.grid(row=len(fields) + 5, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
 
 # Display values on right side (bottom section)
