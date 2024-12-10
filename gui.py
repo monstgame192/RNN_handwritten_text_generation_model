@@ -66,8 +66,11 @@ def process_text(
         )
         print(f"Page {page_num + 1} written to {filename}")
 
+margin_left_line = None
+margin_top_line = None
 
 def update_preview():
+    global margin_left_line, margin_top_line  # Access the global variables
     try:
         # Get user inputs
         view_height = float(view_height_entry.get())
@@ -107,8 +110,14 @@ def update_preview():
             x_offset + rect_width, y_offset + rect_height,
             outline="black", fill=""
         )
-        canvas.create_line(margin_left_x, y_offset, margin_left_x, y_offset + rect_height, fill="red", width=2)
-        canvas.create_line(x_offset, margin_top_y, x_offset + rect_width, margin_top_y, fill="red", width=2)
+        margin_left_line = canvas.create_line(
+            margin_left_x, y_offset, margin_left_x, y_offset + rect_height, 
+            fill="red", width=2
+        )
+        margin_top_line = canvas.create_line(
+            x_offset, margin_top_y, x_offset + rect_width, margin_top_y, 
+            fill="red", width=2
+        )
 
         # Draw lines and check for overflow
         current_y = margin_top_y + actual_line_height
@@ -314,6 +323,19 @@ def choose_page_color():
         # Update canvas background with selected color
         canvas.config(bg=color)
 
+def choose_margin_color():
+    global margin_left_line, margin_top_line  # Access the global margin lines
+    # Open the color picker dialog and get the selected color
+    color = askcolor()[1]  # The askcolor() function returns a tuple (rgb, hex), so we take the second element for the hex value.
+    
+    if color and margin_left_line and margin_top_line:
+        # Update the margin lines with the selected color
+        canvas.itemconfig(margin_left_line, fill=color)  # Update left margin line color
+        canvas.itemconfig(margin_top_line, fill=color)   # Update top margin line color
+        print(f"Selected Margin Color: {color}")
+
+
+
 def reset_default():
     # Default values as per your 'fields' list
     default_values = {
@@ -440,15 +462,25 @@ styles_combobox.grid(row=len(fields) + 2, column=1, padx=5, pady=5, sticky="ew")
 tk.Label(param_frame, text="Ink Color:").grid(
     row=len(fields) + 3, column=0, padx=5, pady=5, sticky="e"
 )
-styles_combobox = ttk.Combobox(
+color_combobox = ttk.Combobox(
     param_frame, values=["Black", "Blue", "Red", "Green"], state="readonly"
 )
-styles_combobox.set("1")  # Default value
-styles_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
+color_combobox.set("Black")  # Default value
+color_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
 
 # Page Color Selection
+tk.Label(param_frame, text="Page Color:").grid(
+    row=len(fields) + 4, column=0, padx=5, pady=5, sticky="e"
+)
 page_color_button = ttk.Button(param_frame, text="Select Page Color", command=choose_page_color)
-page_color_button.grid(row=len(fields) + 4, column=0, columnspan=2, pady=10, padx=5)
+page_color_button.grid(row=len(fields) + 4, column=1, columnspan=2, pady=10, padx=5, sticky="ew")
+
+# Margin Color Selection
+tk.Label(param_frame, text="Margin Color:").grid(
+    row=len(fields) + 5, column=0, padx=5, pady=5, sticky="e"
+)
+page_color_button = ttk.Button(param_frame, text="Select Margin Color", command=choose_margin_color)
+page_color_button.grid(row=len(fields) + 5, column=1, columnspan=2, pady=10, padx=5, sticky="ew")
 
 
 # Display values on right side (bottom section)
@@ -465,7 +497,7 @@ canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
-button_frame.grid(row=len(fields) + 5, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
+button_frame.grid(row=len(fields) + 6, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
 
 # Configure columns to expand equally
 button_frame.grid_columnconfigure(0, weight=1)
@@ -486,7 +518,7 @@ reset_button.grid(row=0, column=2, sticky="ew", padx=5)
 
 # Create a frame for the style display (below the buttons in the left section)
 style_frame = tk.Frame(param_frame)
-style_frame.grid(row=len(fields) + 6, column=0, columnspan=2, pady=10)
+style_frame.grid(row=len(fields) + 7, column=0, columnspan=2, pady=10)
 
 # Label to show the selected style value (now will display an image)
 style_value_label = tk.Label(style_frame)
