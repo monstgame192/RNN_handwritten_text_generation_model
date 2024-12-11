@@ -72,10 +72,12 @@ page_preview = None
 selected_page_color = "white"  # Default page color
 selected_margin_color = "red"  # Default margin color
 selected_line_color = "lightgray"  # Default line color
+overflow = False
 
 def update_preview():
     global margin_left_line, margin_top_line, page_preview  # Access the global variables
     global selected_page_color, selected_margin_color, selected_line_color  # Access the selected colors
+    global overflow
     try:
         # Get user inputs
         view_height = float(view_height_entry.get())
@@ -198,6 +200,9 @@ def update_preview():
 
 def on_generate():
     update_preview()
+    if overflow:
+        messagebox.showwarning("Overflow", "Too many lines to fit in the given space.")
+        return
     try:
         # Get user inputs
         input_text = text_box.get("1.0", tk.END).strip()
@@ -496,23 +501,23 @@ margin_top_entry = entries["Margin Top"]
 
 # Styles dropdown (combobox)
 tk.Label(param_frame, text="Styles:").grid(
-    row=len(fields) + 2, column=0, padx=5, pady=5, sticky="e"
+    row=len(fields) + 3, column=0, padx=5, pady=5, sticky="e"
 )
 styles_combobox = ttk.Combobox(
     param_frame, values=[str(i) for i in range(1, 13)], state="readonly"
 )
 styles_combobox.set("1")  # Default value
-styles_combobox.grid(row=len(fields) + 2, column=1, padx=5, pady=5, sticky="ew")
+styles_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
 
 # Color dropdown (combobox)
 tk.Label(param_frame, text="Ink Color:").grid(
-    row=len(fields) + 3, column=0, padx=5, pady=5, sticky="e"
+    row=len(fields) + 2, column=0, padx=5, pady=5, sticky="e"
 )
 color_combobox = ttk.Combobox(
     param_frame, values=["Black", "Blue", "Red", "Green"], state="readonly"
 )
 color_combobox.set("Black")  # Default value
-color_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
+color_combobox.grid(row=len(fields) + 2, column=1, padx=5, pady=5, sticky="ew")
 
 
 
