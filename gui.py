@@ -485,10 +485,12 @@ tk.Label(param_frame, text="Margin Color:").grid(
 page_color_button = ttk.Button(param_frame, text="Select Margin Color", command=choose_margin_color)
 page_color_button.grid(row=len(fields) + 5, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
-
-# Display values on right side (bottom section)
-value_frame = tk.Frame(input_frame)
-value_frame.pack(padx=10, pady=5, fill="both", expand=True)
+# Line Color Selection
+tk.Label(param_frame, text="Line Color:").grid(
+    row=len(fields) + 6, column=0, padx=5, pady=5, sticky="e"
+)
+line_color_button = ttk.Button(param_frame, text="Select Line Color")
+line_color_button.grid(row=len(fields) + 6, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
 # Display values on right side (bottom section)
 value_frame = tk.Frame(input_frame)
@@ -500,7 +502,7 @@ canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
-button_frame.grid(row=len(fields) + 6, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
+button_frame.grid(row=len(fields) + 7, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
 
 # Configure columns to expand equally
 button_frame.grid_columnconfigure(0, weight=1)
@@ -521,7 +523,7 @@ reset_button.grid(row=0, column=2, sticky="ew", padx=5)
 
 # Create a frame for the style display (below the buttons in the left section)
 style_frame = tk.Frame(param_frame)
-style_frame.grid(row=len(fields) + 7, column=0, columnspan=2, pady=10)
+style_frame.grid(row=len(fields) + 8, column=0, columnspan=2, pady=10)
 
 # Label to show the selected style value (now will display an image)
 style_value_label = tk.Label(style_frame)
