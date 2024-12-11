@@ -324,6 +324,7 @@ def choose_page_color():
     if color and page_preview:
         # Update the page preview rectangle with the selected color
         canvas.itemconfig(page_preview, fill=color)
+        
         print(f"Selected Page Color: {color}")
 
 def choose_margin_color():
@@ -471,26 +472,34 @@ color_combobox = ttk.Combobox(
 color_combobox.set("Black")  # Default value
 color_combobox.grid(row=len(fields) + 3, column=1, padx=5, pady=5, sticky="ew")
 
-# Page Color Selection
-tk.Label(param_frame, text="Page Color:").grid(
-    row=len(fields) + 4, column=0, padx=5, pady=5, sticky="e"
-)
-page_color_button = ttk.Button(param_frame, text="Select Page Color", command=choose_page_color)
-page_color_button.grid(row=len(fields) + 4, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
-# Margin Color Selection
-tk.Label(param_frame, text="Margin Color:").grid(
-    row=len(fields) + 5, column=0, padx=5, pady=5, sticky="e"
-)
-page_color_button = ttk.Button(param_frame, text="Select Margin Color", command=choose_margin_color)
-page_color_button.grid(row=len(fields) + 5, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
 
-# Line Color Selection
-tk.Label(param_frame, text="Line Color:").grid(
-    row=len(fields) + 6, column=0, padx=5, pady=5, sticky="e"
-)
-line_color_button = ttk.Button(param_frame, text="Select Line Color")
-line_color_button.grid(row=len(fields) + 6, column=1, columnspan=2, pady=5, padx=5, sticky="ew")
+
+
+
+
+
+# Buttons for preview and generate
+page_button_frame = tk.Frame(param_frame)
+page_button_frame.grid(row=len(fields) + 4, column=0, columnspan=2, pady=5, padx=0, sticky="ew")
+
+# Configure columns to expand equally
+page_button_frame.grid_columnconfigure(0, weight=1, uniform="button")
+page_button_frame.grid_columnconfigure(1, weight=1, uniform="button")
+page_button_frame.grid_columnconfigure(2, weight=1, uniform="button")
+
+# Add Preview and Generate buttons
+page_color_button = ttk.Button(page_button_frame, text="Page Color", command=choose_page_color)
+page_color_button.grid(row=0, column=0, sticky="ew", padx=5)
+
+margin_color_button = ttk.Button(page_button_frame, text="Margin Color", command=choose_margin_color)
+margin_color_button.grid(row=0, column=1, sticky="ew", padx=5)
+
+# Rest to Default button
+line_color_button = ttk.Button(page_button_frame, text="Line Color")
+line_color_button.grid(row=0, column=2, sticky="ew", padx=5)
+
+
 
 # Display values on right side (bottom section)
 value_frame = tk.Frame(input_frame)
@@ -502,12 +511,12 @@ canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
-button_frame.grid(row=len(fields) + 7, column=0, columnspan=2, pady=10, padx=0, sticky="ew")
+button_frame.grid(row=len(fields) + 5, column=0, columnspan=2, pady=5, padx=0, sticky="ew")
 
 # Configure columns to expand equally
-button_frame.grid_columnconfigure(0, weight=1)
-button_frame.grid_columnconfigure(1, weight=1)
-button_frame.grid_columnconfigure(2, weight=1)
+button_frame.grid_columnconfigure(0, weight=1, uniform="button")
+button_frame.grid_columnconfigure(1, weight=1, uniform="button")
+button_frame.grid_columnconfigure(2, weight=1, uniform="button")
 
 # Add Preview and Generate buttons
 preview_button = ttk.Button(button_frame, text="Preview", command=update_preview)
@@ -517,13 +526,13 @@ generate_button = ttk.Button(button_frame, text="Generate", command=on_generate)
 generate_button.grid(row=0, column=1, sticky="ew", padx=5)
 
 # Rest to Default button
-reset_button = ttk.Button(button_frame, text="Reset to Default", command=reset_default)
+reset_button = ttk.Button(button_frame, text="Reset Default", command=reset_default)
 reset_button.grid(row=0, column=2, sticky="ew", padx=5)
 
 
 # Create a frame for the style display (below the buttons in the left section)
 style_frame = tk.Frame(param_frame)
-style_frame.grid(row=len(fields) + 8, column=0, columnspan=2, pady=10)
+style_frame.grid(row=len(fields) + 6, column=0, columnspan=2, pady=10)
 
 # Label to show the selected style value (now will display an image)
 style_value_label = tk.Label(style_frame)
