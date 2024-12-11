@@ -143,7 +143,7 @@ def update_preview():
         )
 
         # Draw the border rectangle for the page preview
-        page_preview = canvas.create_rectangle(
+        canvas.create_rectangle(
             x_offset, y_offset, 
             x_offset + rect_width, y_offset + rect_height,
             outline="black", fill=None
@@ -166,7 +166,7 @@ def update_preview():
         # Show a warning if overflow occurs
         if overflow:
             warning_text = "⚠ Too Many Lines"
-            font_size = 14
+            font_size = 12
             warning_x = canvas.winfo_width() / 2
             warning_y = canvas.winfo_height() / 2
 
