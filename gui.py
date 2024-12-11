@@ -243,6 +243,9 @@ def on_generate():
             view_width,
             margin_left,
             margin_top,
+            selected_page_color,
+            selected_margin_color,
+            selected_line_color
         ]
 
         # Alphabet
@@ -416,6 +419,7 @@ def reset_default():
 
     #reset color combo box
     color_combobox.set("Black")
+    update_style_label()
 
     # Optionally, you can reset the canvas or other UI components as well
     canvas.delete("all")  # Clear the preview canvas

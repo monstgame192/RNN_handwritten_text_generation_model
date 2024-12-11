@@ -7,26 +7,26 @@ from handwriting_synthesis import drawing
 def _draw(strokes, lines, filename, stroke_colors=None, stroke_widths=None, page = None):
     stroke_colors = stroke_colors or ['black'] * len(lines)
     stroke_widths = stroke_widths or [2] * len(lines)
-    
-    line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top = page or [32, 24, 896, 632, -64, -96]
+
+    line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top, page_color, margin_color, line_color = page or [32, 24, 896, 632, -64, -96, "fff", "f00", "888"]
 
 
     # Initialize the SVG drawing
     dwg = svgwrite.Drawing(filename=filename)
     dwg.viewbox(width=view_width, height=view_height)
-    dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill='white'))
+    dwg.add(dwg.rect(insert=(0, 0), size=(view_width, view_height), fill=page_color))
 
 
     # Draw fixed number of ruled lines
     for i in range(total_lines_per_page):
         y_position = line_height * (i + 1) - margin_top # Adjust as needed to align with text
-        dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke='lightgray', stroke_width=1))
+        dwg.add(dwg.line(start=(0, y_position), end=(view_width, y_position), stroke=line_color, stroke_width=1))
 
-    dwg.add(dwg.line(start=(-margin_left + line_height/2, 0), end=(-margin_left + line_height/2, view_height), stroke='red', stroke_width=1))
-    dwg.add(dwg.line(start=(-margin_left + line_height/2 - 5, 0), end=(-margin_left + line_height/2 - 5, view_height), stroke='red', stroke_width=1))
+    dwg.add(dwg.line(start=(-margin_left + line_height/2, 0), end=(-margin_left + line_height/2, view_height), stroke=margin_color, stroke_width=1))
+    dwg.add(dwg.line(start=(-margin_left + line_height/2 - 5, 0), end=(-margin_left + line_height/2 - 5, view_height), stroke=margin_color, stroke_width=1))
 
-    dwg.add(dwg.line(start=(0, -margin_top), end=(view_width, -margin_top), stroke='red', stroke_width=1))
-    dwg.add(dwg.line(start=(0, -margin_top - 5), end=(view_width, -margin_top - 5), stroke='red', stroke_width=1))
+    dwg.add(dwg.line(start=(0, -margin_top), end=(view_width, -margin_top), stroke=margin_color, stroke_width=1))
+    dwg.add(dwg.line(start=(0, -margin_top - 5), end=(view_width, -margin_top - 5), stroke=margin_color, stroke_width=1))
 
 
     initial_coord = np.array([margin_left, margin_top - line_height/2])
