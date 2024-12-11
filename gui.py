@@ -22,8 +22,11 @@ def process_text(
     Processes text input, sanitizes, wraps, paginates it,
     and generates handwriting SVG files.
     """
-    # Split input text into lines
-    lines = [line.strip() for line in input_text.split("\n") if line.strip()]
+
+
+
+    # Split input text into lines, preserving empty lines
+    lines = [line.strip() if line.strip() else '.' for line in input_text.split("\n")]
     # convert stroke colors values from text counterpart to hexadecimal (black blue red and green only)
     stroke_colors = {"Black": "#000000", "Blue": "#0000FF", "Red": "#FF0000", "Green": "#008000"}[stroke_colors]
 

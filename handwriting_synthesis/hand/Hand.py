@@ -59,6 +59,7 @@ class Hand(object):
                     )
 
         strokes = self._sample(lines, biases=biases, styles=styles)
+        lines = ['' if line == '.' else line for line in lines]
         _draw(strokes, lines, filename, stroke_colors=stroke_colors, stroke_widths=stroke_widths, page=page)
 
     def _sample(self, lines, biases=None, styles=None):
