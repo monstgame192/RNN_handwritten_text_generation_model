@@ -1,0 +1,18 @@
+name: test_hand
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8.20
+  - pip
+  - pip:
+      - CairoSVG==2.7.1
+      - matplotlib==3.7.5
+      - numpy==1.23.5
+      - pandas==2.0.3
+      - scikit-learn==1.3.2
+      - scipy==1.10.1
+      - svgwrite==1.4.3
+      - tensorflow==2.12.0
+      - tensorflow-intel==2.12.0
+      - tensorflow-probability==0.20.1

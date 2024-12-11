@@ -90,8 +90,9 @@ def main():
     view_width = view_height * 0.707
     margin_left = -64
     margin_top = -96
+    page_color, margin_color, line_color = "white", "red", "lightgrey"
 
-    page = [line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top]
+    page = [line_height, total_lines_per_page, view_height, view_width, margin_left, margin_top, page_color, margin_color, line_color]
 
 
     # Call the process_text function
