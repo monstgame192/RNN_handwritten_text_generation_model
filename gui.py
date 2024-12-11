@@ -14,6 +14,7 @@ def process_text(
     lines_per_page,
     biases,
     styles,
+    stroke_colors,
     stroke_widths,
     page,
 ):
@@ -23,6 +24,8 @@ def process_text(
     """
     # Split input text into lines
     lines = [line.strip() for line in input_text.split("\n") if line.strip()]
+    # convert stroke colors values from text counterpart to hexadecimal (black blue red and green only)
+    stroke_colors = {"Black": "#000000", "Blue": "#0000FF", "Red": "#FF0000", "Green": "#008000"}[stroke_colors]
 
     # Sanitize lines
     sanitized_lines = [
@@ -53,6 +56,7 @@ def process_text(
     os.makedirs(output_dir, exist_ok=True)
 
     # Generate handwriting SVG files
+    # def write(self, filename, lines, biases=None, styles=None, stroke_colors=None, stroke_widths=None, page=None):
     hand = Hand()
     for page_num, page_lines in enumerate(pages):
         filename = os.path.join(output_dir, f"result_page_{page_num + 1}.svg")
@@ -61,6 +65,7 @@ def process_text(
             lines=page_lines,
             biases=[biases] * len(page_lines),
             styles=[styles] * len(page_lines),
+            stroke_colors = [stroke_colors] * len(page_lines),
             stroke_widths=[stroke_widths] * len(page_lines),
             page=page,
         )
@@ -214,6 +219,7 @@ def on_generate():
         lines_per_page = int(lines_per_page_entry.get())
         handwriting_consistency = float(handwriting_consistency_entry.get())
         styles = int(styles_combobox.get())
+        ink_color = color_combobox.get()
         pen_thickness = float(pen_thickness_entry.get())
         line_height = int(line_height_entry.get())
         total_lines_per_page = int(total_lines_entry.get())
@@ -325,6 +331,7 @@ def on_generate():
             lines_per_page,
             handwriting_consistency,
             styles,
+            ink_color,
             pen_thickness,
             page,
         )
