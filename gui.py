@@ -500,7 +500,7 @@ margin_left_entry = entries["Margin Left"]
 margin_top_entry = entries["Margin Top"]
 
 # Styles dropdown (combobox)
-tk.Label(param_frame, text="Styles:").grid(
+tk.Label(param_frame, text="Writing Style:").grid(
     row=len(fields) + 3, column=0, padx=5, pady=5, sticky="e"
 )
 styles_combobox = ttk.Combobox(
