@@ -69,9 +69,13 @@ def process_text(
 margin_left_line = None
 margin_top_line = None
 page_preview = None
+selected_page_color = "white"  # Default page color
+selected_margin_color = "red"  # Default margin color
+selected_line_color = "lightgray"  # Default line color
 
 def update_preview():
     global margin_left_line, margin_top_line, page_preview  # Access the global variables
+    global selected_page_color, selected_margin_color, selected_line_color  # Access the selected colors
     try:
         # Get user inputs
         view_height = float(view_height_entry.get())
@@ -109,15 +113,7 @@ def update_preview():
         page_preview = canvas.create_rectangle(
             x_offset, y_offset, 
             x_offset + rect_width, y_offset + rect_height,
-            outline="black", fill=""
-        )
-        margin_left_line = canvas.create_line(
-            margin_left_x, y_offset, margin_left_x, y_offset + rect_height, 
-            fill="red", width=2
-        )
-        margin_top_line = canvas.create_line(
-            x_offset, margin_top_y, x_offset + rect_width, margin_top_y, 
-            fill="red", width=2
+            outline="black", fill=selected_page_color
         )
 
         # Draw lines and check for overflow
@@ -131,10 +127,25 @@ def update_preview():
             canvas.create_line(
                 x_offset, current_y,
                 x_offset + rect_width, current_y,
-                fill="lightgray", width=1
+                fill=selected_line_color, width=1, tags="horizontal_line"
             )
             current_y += actual_line_height
 
+        margin_left_line = canvas.create_line(
+            margin_left_x, y_offset, margin_left_x, y_offset + rect_height, 
+            fill=selected_margin_color, width=2
+        )
+        margin_top_line = canvas.create_line(
+            x_offset, margin_top_y, x_offset + rect_width, margin_top_y, 
+            fill=selected_margin_color, width=2
+        )
+
+        # Draw the border rectangle for the page preview
+        page_preview = canvas.create_rectangle(
+            x_offset, y_offset, 
+            x_offset + rect_width, y_offset + rect_height,
+            outline="black", fill=None
+        )
 
         # Display dimensions and lines
         canvas.create_text(
@@ -318,17 +329,18 @@ def on_generate():
         messagebox.showerror("Error", str(e))
 
 def choose_page_color():
-    global page_preview # Access the global page preview rectangle
+    global page_preview, selected_page_color
     # Open color picker dialog to select page background color
     color = askcolor()[1]
     if color and page_preview:
         # Update the page preview rectangle with the selected color
         canvas.itemconfig(page_preview, fill=color)
-        
+        selected_page_color = color
+        page_color_button.config(bg=color)
         print(f"Selected Page Color: {color}")
 
 def choose_margin_color():
-    global margin_left_line, margin_top_line  # Access the global margin lines
+    global margin_left_line, margin_top_line, selected_margin_color
     # Open the color picker dialog and get the selected color
     color = askcolor()[1]  # The askcolor() function returns a tuple (rgb, hex), so we take the second element for the hex value.
     
@@ -336,7 +348,25 @@ def choose_margin_color():
         # Update the margin lines with the selected color
         canvas.itemconfig(margin_left_line, fill=color)  # Update left margin line color
         canvas.itemconfig(margin_top_line, fill=color)   # Update top margin line color
+        selected_margin_color = color
+        margin_color_button.config(bg=color)
         print(f"Selected Margin Color: {color}")
+
+
+def choose_line_color():
+    global selected_line_color
+    # Open the color picker dialog and get the selected color
+    color = askcolor()[1]  # Get the hex value of the selected color
+
+    if color:
+        # Update the color of the lines in the preview canvas
+        for item in canvas.find_withtag("horizontal_line"):
+            # Check if the item is a line by looking at its type
+            if canvas.type(item) == "line":
+                canvas.itemconfig(item, fill=color)  # Update the color
+        line_color_button.config(bg=color)  # Change the button color as a visual cue
+        selected_line_color = color
+        print(f"Selected Line Color: {color}")
 
 
 
@@ -362,6 +392,18 @@ def reset_default():
 
     # Reset the styles combobox to default value
     styles_combobox.set("1")
+    # reset the page, margin and line colors
+    global selected_page_color, selected_margin_color, selected_line_color
+    selected_page_color = "white"
+    selected_margin_color = "red"
+    selected_line_color = "lightgray"
+    # reset the color buttons to have no color at all
+    page_color_button.config(bg="SystemButtonFace")
+    margin_color_button.config(bg="SystemButtonFace")
+    line_color_button.config(bg="SystemButtonFace")
+
+    #reset color combo box
+    color_combobox.set("Black")
 
     # Optionally, you can reset the canvas or other UI components as well
     canvas.delete("all")  # Clear the preview canvas
@@ -488,16 +530,19 @@ page_button_frame.grid_columnconfigure(0, weight=1, uniform="button")
 page_button_frame.grid_columnconfigure(1, weight=1, uniform="button")
 page_button_frame.grid_columnconfigure(2, weight=1, uniform="button")
 
-# Add Preview and Generate buttons
-page_color_button = ttk.Button(page_button_frame, text="Page Color", command=choose_page_color)
+page_color_button = tk.Button(page_button_frame, text="Page Color", command=choose_page_color, relief="groove")
 page_color_button.grid(row=0, column=0, sticky="ew", padx=5)
 
-margin_color_button = ttk.Button(page_button_frame, text="Margin Color", command=choose_margin_color)
+margin_color_button = tk.Button(page_button_frame, text="Margin Color", command=choose_margin_color, relief="groove")
 margin_color_button.grid(row=0, column=1, sticky="ew", padx=5)
 
-# Rest to Default button
-line_color_button = ttk.Button(page_button_frame, text="Line Color")
+line_color_button = tk.Button(page_button_frame, text="Line Color", relief="groove", command=choose_line_color)
 line_color_button.grid(row=0, column=2, sticky="ew", padx=5)
+
+
+
+
+
 
 
 
