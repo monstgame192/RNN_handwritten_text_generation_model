@@ -635,7 +635,7 @@ explanation_frame.pack(fill="both", expand=False)
 # Text widget to display the explanation
 explanation_text = tk.Text(explanation_frame, wrap="word", height=5, width=40, padx=5, pady=5, fg="black", bg="white", font=("Arial", 10))
 explanation_text.insert("1.0", "How it works:\n\n"
-                               "This program uses a Recurrent Neural Network (RNN) to generate realistic handwriting from text.\n"
+                               "This program uses a Recurrent Neural Network (RNN) to generate realistic handwriting from text. Every stroke is unique.\n"
                                "Just enter your text, set the parameters and click 'Generate'.")
 explanation_text.config(state=tk.DISABLED)  # Make the text box read-only
 explanation_text.pack(padx=10, pady=5, fill="x", expand=False)
