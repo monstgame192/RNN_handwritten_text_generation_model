@@ -457,6 +457,21 @@ def update_style_label(event=None):
         style_value_label.config(text="Image not found")
         print(f"Error loading image: {e}")
 
+placeholder = "Enter your text here."
+
+# Text input box with placeholder functionality
+def on_focus_in(event):
+    if text_box.get("1.0", "end-1c") == placeholder:
+        text_box.delete("1.0", "end")
+        text_box.config(fg="black")  # Restore text color when typing starts
+
+def on_focus_out(event):
+    if not text_box.get("1.0", "end-1c"):
+        text_box.insert("1.0", placeholder)
+        text_box.config(fg="grey")  # Change placeholder color
+
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Handwriting SVG Generator")
@@ -470,9 +485,12 @@ input_frame = tk.Frame(root, width=500, height=600)
 input_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 # Text input box
-tk.Label(input_frame, text="Input Text:").pack(padx=10, pady=5, anchor="w")
-text_box = tk.Text(input_frame, wrap="word", width=40, height=20)
+text_box = tk.Text(input_frame, wrap="word", width=40, height=20, fg="grey")  # Set initial color to grey for placeholder
+text_box.insert("1.0", placeholder)  # Insert placeholder text
 text_box.pack(padx=10, pady=5, fill="both", expand=True)
+
+text_box.bind("<FocusIn>", on_focus_in)
+text_box.bind("<FocusOut>", on_focus_out)
 
 # Frame for parameter inputs (left half)
 param_frame = tk.Frame(root, width=500, height=600)
