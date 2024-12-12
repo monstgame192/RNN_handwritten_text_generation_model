@@ -475,13 +475,13 @@ def on_focus_out(event):
 # Create the main window
 root = tk.Tk()
 root.title("Handwriting SVG Generator")
-root.resizable(False, False)
+root.resizable(False, True)
 
 # Load image for banner
 banner_image = PhotoImage(file="assets/banner.png")  # Adjust the path to your image
 
 # Frame for text input (right half)
-input_frame = tk.Frame(root, width=500, height=600)
+input_frame = tk.Frame(root, width=500, height=200)
 input_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 # Add a "Follow me" section at the top of the input_frame, left aligned
@@ -626,7 +626,19 @@ value_frame.pack(padx=10, pady=5, fill="both", expand=True)
 
 # Add Canvas to draw the white rectangle in the bottom section of input_frame
 canvas = tk.Canvas(value_frame, bg="white")
-canvas.grid(row=0, column=0, padx=10, pady=5, sticky="ew")
+canvas.grid(row=0, column=0, pady=5, sticky="ew")
+
+# Adding the explanation text below the canvas
+explanation_frame = tk.Frame(input_frame)  # Create a new frame to contain the explanation
+explanation_frame.pack(fill="both", expand=False)
+
+# Text widget to display the explanation
+explanation_text = tk.Text(explanation_frame, wrap="word", height=5, width=40, padx=5, pady=5, fg="black", bg="white", font=("Arial", 10))
+explanation_text.insert("1.0", "How it works:\n\n"
+                               "This program uses a Recurrent Neural Network (RNN) to generate realistic handwriting from text.\n"
+                               "Just enter your text, set the parameters and click 'Generate'.")
+explanation_text.config(state=tk.DISABLED)  # Make the text box read-only
+explanation_text.pack(padx=10, pady=5, fill="x", expand=False)
 
 # Buttons for preview and generate
 button_frame = tk.Frame(param_frame)
