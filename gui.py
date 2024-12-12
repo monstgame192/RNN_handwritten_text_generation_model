@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 from tkinter import PhotoImage  # To handle the image
 from handwriting_synthesis import Hand
 from tkinter.colorchooser import askcolor
+from tkinter import filedialog
 
 
 def process_text(
@@ -207,6 +208,12 @@ def update_preview():
 
 
 def on_generate():
+    # Ask user to select a directory for saving the files
+    output_dir = filedialog.askdirectory(title="Select Output Directory")
+    
+    if not output_dir:  # Check if the user canceled the dialog
+        messagebox.showwarning("No Directory Selected", "Please select a directory to save the files.")
+        return
     update_preview()
     if overflow:
         messagebox.showwarning("Overflow", "Too many lines to fit in the given space.")
@@ -214,8 +221,8 @@ def on_generate():
     try:
         # Get user inputs
         input_text = text_box.get("1.0", tk.END).strip()
-        output_dir = os.path.join(os.path.dirname(__file__), "img")
-        os.makedirs(output_dir, exist_ok=True)
+        # output_dir = os.path.join(os.path.dirname(__file__), "img")
+        # os.makedirs(output_dir, exist_ok=True)
 
         # Parameters
         max_line_length = int(max_line_length_entry.get())
