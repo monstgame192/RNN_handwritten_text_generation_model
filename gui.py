@@ -484,8 +484,38 @@ banner_image = PhotoImage(file="assets/banner.png")  # Adjust the path to your i
 input_frame = tk.Frame(root, width=500, height=600)
 input_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
+# Add a "Follow me" section at the top of the input_frame, left aligned
+follow_label = tk.Label(input_frame, text="© Rudraneel Dutta", font=("Arial", 10), anchor="w")
+follow_label.pack(anchor="e", padx=10)  # Left-align and add some space
+
+# Frame to contain the links side by side
+links_frame = tk.Frame(input_frame)
+links_frame.pack(anchor="e", padx=0)
+
+# GitHub link (side by side in the links_frame)
+github_link = tk.Label(links_frame, text="GitHub", fg="blue", cursor="hand2")
+github_link.pack(side="left", padx=10)  # Place it to the left
+
+# Define a function to open the GitHub link
+def open_github(event):
+    import webbrowser
+    webbrowser.open("https://github.com/rudyoactiv")
+
+github_link.bind("<Button-1>", open_github)
+
+# LinkedIn link (side by side in the links_frame)
+linkedin_link = tk.Label(links_frame, text="LinkedIn", fg="blue", cursor="hand2")
+linkedin_link.pack(side="left", padx=10)  # Place it next to GitHub
+
+# Define a function to open the LinkedIn link
+def open_linkedin(event):
+    import webbrowser
+    webbrowser.open("https://www.linkedin.com/in/its-rudraneel")
+
+linkedin_link.bind("<Button-1>", open_linkedin)
+
 # Text input box
-text_box = tk.Text(input_frame, wrap="word", width=40, height=20, fg="grey")  # Set initial color to grey for placeholder
+text_box = tk.Text(input_frame, wrap="word", width=40, height=10, fg="grey")  # Set initial color to grey for placeholder
 text_box.insert("1.0", placeholder)  # Insert placeholder text
 text_box.pack(padx=10, pady=5, fill="both", expand=True)
 
