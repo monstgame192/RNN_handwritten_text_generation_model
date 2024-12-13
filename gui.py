@@ -474,7 +474,7 @@ def on_focus_out(event):
 
 # Create the main window
 root = tk.Tk()
-root.title("Handwriting SVG Generator")
+root.title("TypeScribe - Text to Handwriting")
 root.resizable(False, True)
 
 # Load image for banner
