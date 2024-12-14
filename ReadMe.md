@@ -38,9 +38,14 @@ There are two ways to get things rolling:
 
 2. **Clone the Repository:**
    - Alternatively, you can clone this repo using ```git clone https://github.com/rudyoactiv/typescribe-handwriting.git```
+   - Navigate to the cloned directory.
+   - With Anaconda installed, run ```conda env create -f environment.yml``` to create an environment.
+   - Run ```conda activate test_hand``` to activate your environment.
+   - Run the program with ```python gui.py```
+
 
 ### Usage
-1. Launch the application with the command ```python gui.py``` or double click the executable.
+1. Launch the application with the command ```python gui.py``` or double click TypeScribe.exe.
 2. Enter your text and adjust settings via the interface.
 3. Preview the layout and handwriting style.
 4. Click **Generate**.
@@ -51,11 +56,18 @@ There are two ways to get things rolling:
 - Antivirus programs may flag (and even delete) the executable. This is due to the way Python programs are built and handled by Windows and cannot possibly be fixed. However, there is no cause for concern.
 - The application itself may freeze while your file is being generated. No need to panic, it does not crash.
 
+### Future Plans
+- A more responsive design
+- More customization options
+- Increasing the valid character set
+- Fix antivirus false positives
+- Build an installer to replace the zip
+- Extra text formatting options (vary alignment, ink colors in a single document).
+
 ### Acknowledgements
 This project is inspired by the work in the [handwriting-synthesis](https://github.com/sjvasquez/handwriting-synthesis) repository by **sjvasquez**, which provides the foundational implementation for handwriting synthesis using Recurrent Neural Networks (RNNs). 
 
 The handwriting synthesis in TypeScribe is based on the work presented in the paper **[Generating Sequences with Recurrent Neural Networks](https://arxiv.org/abs/1308.0850)** by Alex Graves. [Graves, A. (2013). *Generating sequences with recurrent neural networks*. arXiv preprint arXiv:1308.0850.]
-
 
 ---
 
