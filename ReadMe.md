@@ -25,6 +25,7 @@ Got you covered.
 - **Choose from 12 predefined handwriting styles.**
 - **Adjust line spacing, page size, margins, ink color, pen thickness, and more.**
 - **User-friendly interface**
+- **Automatically splits large texts into multiple lines, paragraphs and pages.**
 - **Scalable SVG Output that maintains quality even on resizing**
 
 
