@@ -7,10 +7,10 @@ Got you covered.
 
 <table align="center">
   <tr>
-    <td><img src="https://github.com/user-attachments/assets/077894b9-6fb9-430e-8b13-de8ae40866e0" alt="" width="300"></td>
-    <td><img src="https://github.com/user-attachments/assets/cf977b24-a56a-4f0c-aa15-da991e487b0b" alt="" width="300"></td>
-    <td><img src="https://github.com/user-attachments/assets/7804ff31-4403-4621-90ac-3b65b0aac13f" alt="" width="300"></td>
-    <td><img src="https://github.com/user-attachments/assets/defd2a1c-d28b-49fa-bb49-20f297a830c1" alt="" width="300"></td>
+    <td><img src="assets/typescribe.png" alt="" width="300"></td>
+    <td><img src="assets/1.png" alt="" width="300"></td>
+    <td><img src="assets/2.png" alt="" width="300"></td>
+    <td><img src="assets/3.png" alt="" width="300"></td>
   </tr>
       <tr>
     <td>TypeScribe</td>
