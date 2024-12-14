@@ -1,72 +1,65 @@
-# Handwriting Synthesis Project
+# TypeScribe v1.0
 
-## Prerequisites
+Need to send out a hundred organic Christmas cards? Or you have a fifty page essay due and _Brush Script_ doesn't quite cut it?
+Got you covered.
 
-- Python 3.8+
-- Anaconda or Miniconda
+**TypeScribe** is a tool that uses Machine Learning to convert typed text into realistic handwriting by introducing customizable degrees of randomness and variations, to make it all so believable.
 
-## Setup Instructions
+<table align="center">
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/077894b9-6fb9-430e-8b13-de8ae40866e0" alt="" width="300"></td>
+    <td><img src="https://github.com/user-attachments/assets/cf977b24-a56a-4f0c-aa15-da991e487b0b" alt="" width="300"></td>
+    <td><img src="https://github.com/user-attachments/assets/7804ff31-4403-4621-90ac-3b65b0aac13f" alt="" width="300"></td>
+    <td><img src="https://github.com/user-attachments/assets/defd2a1c-d28b-49fa-bb49-20f297a830c1" alt="" width="300"></td>
+  </tr>
+      <tr>
+    <td>TypeScribe</td>
+    <td>Totally not homework</td>
+    <td>A truly heartfelt letter</td>
+    <td>Christmas Cards too!?</td>
+  </tr>
+</table>
 
-### 1. Clone the repository
+### Features
+- **Realistic Handwriting Generation with a Recurrent Neural Network (RNN)**
+- **Choose from 12 predefined handwriting styles.**
+- **Adjust line spacing, page size, margins, ink color, pen thickness, and more.**
+- **User-friendly interface**
+- **Scalable SVG Output that maintains quality even on resizing**
 
-```bash
-git clone https://github.com/rudyoactiv/handwriting-synthesis.git
-cd handwriting-synthesis
-```
 
-### 2. Create the Conda environment from `environment.yml`
+### System Requirements
+- **Operating System:** Microsoft Windows.
+- **Other Requirements:** 7Zip or WinZip to extract the files.
 
-The project dependencies are specified in the `environment.yml` file. To set up the environment, run the following command:
+### Download
 
-```bash
-conda env create -f environment.yml
-```
+[![Download Windows Executable](https://img.shields.io/badge/Download-TypeScribe--v1.0.zip-green?style=for-the-badge)](https://github.com/rudyoactiv/typescribe-handwriting/releases/download/v1.0/TypeScribe.zip)  
 
-This will create a new environment with all the required dependencies installed.
+### Installation
+1. Download the `TypeScribe-v1.0.zip` file from the Assets section below.
+2. Extract the contents to a folder on your system.
+3. Run the `TypeScribe.exe` file to start the application.
 
-### 3. Activate the environment
+### How to Use
+1. Launch the application.
+2. Enter your text and adjust settings via the interface.
+3. Preview the layout and handwriting style.
+4. Click **Generate**.
+5. Select a destination folder for your files.
+6. Wait while it generates your output. May take a minute.
 
-Once the environment is created, activate it with the following command:
+### Known Issues
+- Your Antivirus may flag (and even delete) the executable. This is due to the way Python programs are built and handled by Windows and cannot possibly be fixed. However, there is no cause for concern. If you would rather run this program directly from the Python file, feel free the clone the [repository](https://github.com/rudyoactiv/typescribe-handwriting).
+- The application itself may freeze while your file is being generated. No need to panic, it does not crash.
 
-```bash
-conda activate test_hand
-```
+### Acknowledgements
+This project is inspired by the work in the [handwriting-synthesis](https://github.com/sjvasquez/handwriting-synthesis) repository by **sjvasquez**, which provides the foundational implementation for handwriting synthesis using Recurrent Neural Networks (RNNs). 
 
-This will activate the `test_hand` environment, where the project dependencies are installed.
+The handwriting synthesis in TypeScribe is based on the work presented in the paper **[Generating Sequences with Recurrent Neural Networks](https://arxiv.org/abs/1308.0850)** by Alex Graves. [Graves, A. (2013). *Generating sequences with recurrent neural networks*. arXiv preprint arXiv:1308.0850.]
 
-### 4. Run the `gui.py` script
 
-To start the application, run the `gui.py` script using the Python executable from the activated environment:
-
-```bash
-python "path/to/handwriting-synthesis/gui.py"
-```
-
-This will launch the GUI, where you can input text and generate handwriting-style SVG files.
-
-### 5. Deactivating the environment
-
-Once you're done using the environment, deactivate it with the following command:
-
-```bash
-conda deactivate
-```
-
----
-
-## Dependencies
-
-The following dependencies are included in the `environment.yml`:
-
-- `CairoSVG==2.7.1`
-- `matplotlib==3.7.5`
-- `numpy==1.23.5`
-- `pandas==2.0.3`
-- `scikit_learn==1.3.2`
-- `scipy==1.10.1`
-- `svgwrite==1.4.3`
-- `tensorflow==2.12.0`
-- `tensorflow_intel==2.12.0`
-- `tensorflow_probability==0.20.1`
 
 ---
+
+Thank you for trying TypeScribe! ✍️
