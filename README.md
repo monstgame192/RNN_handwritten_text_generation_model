@@ -38,7 +38,7 @@ There are two ways to get things rolling:
    - Unzip the file and double-click **TypeScribe.exe** to launch the application.
 
 2. **Clone the Repository:**
-   - Alternatively, you can clone this repo using ```git clone https://github.com/rudyoactiv/typescribe-handwriting.git```
+   - Clone this repo using ```git clone https://github.com/rudyoactiv/typescribe-handwriting.git```
    - Navigate to the cloned directory.
    - With Anaconda installed, run ```conda env create -f environment.yml``` to create an environment.
    - Run ```conda activate test_hand``` to activate your environment.
